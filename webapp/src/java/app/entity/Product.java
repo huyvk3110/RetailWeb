@@ -12,25 +12,26 @@ import java.util.Date;
  * @author huy
  */
 public class Product {
-    String productId;
-    String productName;
-    float priceOutput;
-    int discount;
-    int quantity;
-    int quality;
-    String title;
-    int guarantee;
-    int oneSwitchOne;
-    String description;
-    long view;
-    long sold;
-    Date created;
-    String catalogId;
+    private String productId;
+    private String productName;
+    private float priceOutput;
+    private int discount;
+    private int quantity;
+    private int quality;
+    private String title;
+    private int guarantee;
+    private int oneSwitchOne;
+    private String description;
+    private long view;
+    private long sold;
+    private Date created;
+    private boolean status;
+    private String catalogId;
 
     public Product() {
     }
 
-    public Product(String productId, String productName, float priceOutput, int discount, int quantity, int quality, String title, int guarantee, int oneSwitchOne, String description, long view, long sold, Date created, String catalogId) {
+    public Product(String productId, String productName, float priceOutput, int discount, int quantity, int quality, String title, int guarantee, int oneSwitchOne, String description, long view, long sold, Date created, boolean status, String catalogId) {
         this.productId = productId;
         this.productName = productName;
         this.priceOutput = priceOutput;
@@ -44,6 +45,7 @@ public class Product {
         this.view = view;
         this.sold = sold;
         this.created = created;
+        this.status = status;
         this.catalogId = catalogId;
     }
 
@@ -159,5 +161,13 @@ public class Product {
         this.catalogId = catalogId;
     }
 
-            
+    public boolean isStatus() {
+        return status;
+    }
+
+    public void setStatus(boolean status) {
+        this.status = status;
+    }
+
+    
 }

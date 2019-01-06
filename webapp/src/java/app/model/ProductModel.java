@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package app;
+package app.model;
 
 import app.entity.Product;
 import app.util.ConnectionDB;
@@ -20,13 +20,13 @@ import java.util.List;
  * @author huy
  */
 public class ProductModel {
-    public static void main(String[] args) {
-        ProductModel model = new ProductModel();
-        List<Product> list = model.getProductByCatalog("CA008");
-        for (Product product : list) {
-            System.out.println("Product: " + product.getProductName());
-        }
-    }
+//    public static void main(String[] args) {
+//        ProductModel model = new ProductModel();
+//        List<Product> list = model.getProductByCatalog("CA008");
+//        for (Product product : list) {
+//            System.out.println("Product: " + product.getProductName());
+//        }
+//    }
     
     public List<Product> getProductByCatalog(String catId, int numProduct, boolean isAdmin) {
         Connection con = null;
@@ -55,6 +55,7 @@ public class ProductModel {
                 product.setView(rs.getLong("View"));
                 product.setSold(rs.getLong("Sold"));
                 product.setCreated(rs.getDate("Created"));
+                product.setStatus(rs.getBoolean("Status"));
                 product.setCatalogId(rs.getString("CatalogId"));
                 list.add(product);
             }
@@ -102,6 +103,7 @@ public class ProductModel {
                 product.setView(rs.getLong("View"));
                 product.setSold(rs.getLong("Sold"));
                 product.setCreated(rs.getDate("Created"));
+                product.setStatus(rs.getBoolean("Status"));
                 product.setCatalogId(rs.getString("CatalogId"));
                 list.add(product);
             }
@@ -137,6 +139,7 @@ public class ProductModel {
                 product.setView(rs.getLong("View"));
                 product.setSold(rs.getLong("Sold"));
                 product.setCreated(rs.getDate("Created"));
+                product.setStatus(rs.getBoolean("Status"));
                 product.setCatalogId(rs.getString("CatalogId"));
                 list.add(product);
             }
@@ -172,6 +175,7 @@ public class ProductModel {
                 product.setView(rs.getLong("View"));
                 product.setSold(rs.getLong("Sold"));
                 product.setCreated(rs.getDate("Created"));
+                product.setStatus(rs.getBoolean("Status"));
                 product.setCatalogId(rs.getString("CatalogId"));
                 list.add(product);
             }
@@ -207,6 +211,7 @@ public class ProductModel {
                 product.setView(rs.getLong("View"));
                 product.setSold(rs.getLong("Sold"));
                 product.setCreated(rs.getDate("Created"));
+                product.setStatus(rs.getBoolean("Status"));
                 product.setCatalogId(rs.getString("CatalogId"));
                 list.add(product);
             }
@@ -240,6 +245,7 @@ public class ProductModel {
                 product.setView(rs.getLong("View"));
                 product.setSold(rs.getLong("Sold"));
                 product.setCreated(rs.getDate("Created"));
+                product.setStatus(rs.getBoolean("Status"));
                 product.setCatalogId(rs.getString("CatalogId"));
             }
         } catch (SQLException e) {
@@ -274,6 +280,7 @@ public class ProductModel {
                 product.setView(rs.getLong("View"));
                 product.setSold(rs.getLong("Sold"));
                 product.setCreated(rs.getDate("Created"));
+                product.setStatus(rs.getBoolean("Status"));
                 product.setCatalogId(rs.getString("CatalogId"));
                 list.add(product);
             }
@@ -309,6 +316,7 @@ public class ProductModel {
                 product.setView(rs.getLong("View"));
                 product.setSold(rs.getLong("Sold"));
                 product.setCreated(rs.getDate("Created"));
+                product.setStatus(rs.getBoolean("Status"));
                 product.setCatalogId(rs.getString("CatalogId"));
                 list.add(product);
             }
@@ -379,6 +387,7 @@ public class ProductModel {
                 product.setView(rs.getLong("View"));
                 product.setSold(rs.getLong("Sold"));
                 product.setCreated(rs.getDate("Created"));
+                product.setStatus(rs.getBoolean("Status"));
                 product.setCatalogId(rs.getString("CatalogId"));
             }
         } catch (SQLException e) {
