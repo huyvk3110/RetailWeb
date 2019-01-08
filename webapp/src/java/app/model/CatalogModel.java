@@ -29,14 +29,15 @@ public class CatalogModel {
 ////        System.out.println("Product: " + model.getCatalogById("CA008").getCatalogName());
 //    }
     
-    public List<Catalog> getAllCatalog(boolean isAdmin) {
+    public List<Catalog> getAllCatalog(int type,boolean isAdmin) {
         Connection con = null;
         CallableStatement callST = null;
         List<Catalog> list = new ArrayList<>();
         try {
             con = ConnectionDB.openConnection();
-            callST = con.prepareCall("{call getAllCatalog(?)}");
-            callST.setBoolean(1, isAdmin);
+            callST = con.prepareCall("{call getAllCatalog(?,?)}");
+            callST.setInt(1, type);
+            callST.setBoolean(2, isAdmin);
             ResultSet rs = callST.executeQuery();
             while(rs.next()) {
                 Catalog catalog = new Catalog();
@@ -57,7 +58,7 @@ public class CatalogModel {
     }
     
     public List<Catalog> getAllCatalog() {
-        return this.getAllCatalog(false);
+        return this.getAllCatalog(1,false);
     }
     
     public Catalog getCatalogById(String catId, boolean isAdmin) {
@@ -90,13 +91,14 @@ public class CatalogModel {
         return this.getCatalogById(catId, false);
     }
     
-    public int getNumberCatalog() {
+    public int getNumberCatalog(int type) {
         Connection con = null;
         CallableStatement callST = null;
         int number = 0;
         try {
             con = ConnectionDB.openConnection();
-            callST = con.prepareCall("{call getNumberCatalog()}");
+            callST = con.prepareCall("{call getNumberCatalog(?)}");
+            callST.setInt(1, type);
             ResultSet rs = callST.executeQuery();
             if(rs.next()) {
                 number = rs.getInt(1);
@@ -108,16 +110,21 @@ public class CatalogModel {
         return number;
     }
     
-    public List<Catalog> getCatalogByParentId(String parentId, boolean isAdmin) {
+    public int getNumberCatalog() {
+        return this.getNumberCatalog(1);
+    }
+    
+    public List<Catalog> getCatalogByParentId(String parentId, int type, boolean isAdmin) {
         Connection con = null;
         CallableStatement callST = null;
         List<Catalog> list = new ArrayList<>();
         try {
             con = ConnectionDB.openConnection();
-            callST = con.prepareCall("{call getCatalogByParentId(?,?)}");
+            callST = con.prepareCall("{call getCatalogByParentId(?,?,?)}");
             if(parentId.equals("")) callST.setNull(1, Types.CHAR);
             else callST.setString(1, parentId);
-            callST.setBoolean(2, isAdmin);
+            callST.setInt(2, type);
+            callST.setBoolean(3, isAdmin);
             ResultSet rs = callST.executeQuery();
             while(rs.next()) {
                 Catalog catalog = new Catalog();
@@ -138,10 +145,10 @@ public class CatalogModel {
     }
     
     public List<Catalog> getCatalogByParentId(String parentId) {
-        return this.getCatalogByParentId(parentId,false);
+        return this.getCatalogByParentId(parentId,1,false);
     }
     
     public List<Catalog> getAllMainCatalog() {
-        return this.getCatalogByParentId("",false);
+        return this.getCatalogByParentId("",1,false);
     }
 }
