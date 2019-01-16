@@ -22,11 +22,18 @@ import java.util.List;
 public class CatalogModel {
 //    public static void main(String[] args) {
 //        CatalogModel model = new CatalogModel();
-//        List<Catalog> list = model.getAllMainCatalog();
-//        for (Catalog catalog : list) {
-//            System.out.println("Catalog: " + catalog.getCatalogName());
+////        List<Catalog> list = model.getAllMainCatalog();
+////        for (Catalog catalog : list) {
+////            System.out.println("Catalog: " + catalog.getCatalogName());
+////        }
+//////        System.out.println("Product: " + model.getCatalogById("CA008").getCatalogName());
+//        
+//        Catalog catalog = new Catalog("CA012", "TEST haha", "TEST", 2, 1, true, "CA001");
+//        if(model.updateCatalog(catalog)) {
+//            System.out.println("Insert done");
+//        }else {
+//            System.out.println("Insert fails");
 //        }
-////        System.out.println("Product: " + model.getCatalogById("CA008").getCatalogName());
 //    }
     
     public List<Catalog> getAllCatalog(boolean isAdmin) {
@@ -143,5 +150,79 @@ public class CatalogModel {
     
     public List<Catalog> getAllMainCatalog() {
         return this.getCatalogByParentId("",false);
+    }
+    
+    public void toggleCatalog(String catalogId) {
+        Connection con = null;
+        CallableStatement callST = null;
+        try {
+            con = ConnectionDB.openConnection();
+            callST = con.prepareCall("{call toggleCatalog(?)}");
+            callST.setString(1, catalogId);
+            callST.executeUpdate();
+        } catch (SQLException e) {
+        } finally {
+            ConnectionDB.closeConnection(con, callST);
+        }
+    }
+    
+    public void deleteCatalog(String catalogId) {
+        Connection con = null;
+        CallableStatement callST = null;
+        try {
+            con = ConnectionDB.openConnection();
+            callST = con.prepareCall("{call deleteCatalog(?)}");
+            callST.setString(1, catalogId);
+            callST.executeUpdate();
+        } catch (SQLException e) {
+        } finally {
+            ConnectionDB.closeConnection(con, callST);
+        }
+    }
+    
+    public boolean insertCatalog(Catalog catalog) {
+        Connection con = null;
+        CallableStatement callST = null;
+        boolean check = false;
+        try {
+            con = ConnectionDB.openConnection();
+            callST = con.prepareCall("{call insertCatalog(?,?,?,?,?,?,?)}");
+            callST.setString(1, catalog.getCatalogId());
+            callST.setString(2, catalog.getCatalogName());
+            callST.setString(3, catalog.getDescription());
+            callST.setInt(4, catalog.getPriority());
+            callST.setBoolean(5, catalog.isStatus());
+            callST.setString(6, catalog.getParentId());
+            callST.registerOutParameter(7, Types.BOOLEAN);
+            callST.execute();
+            check = callST.getBoolean(7);
+        } catch (SQLException e) {
+        } finally {
+            ConnectionDB.closeConnection(con, callST);
+        }
+        return check;
+    }
+    
+    public boolean updateCatalog(Catalog catalog) {
+        Connection con = null;
+        CallableStatement callST = null;
+        boolean check = false;
+        try {
+            con = ConnectionDB.openConnection();
+            callST = con.prepareCall("{call updateCatalog(?,?,?,?,?,?,?)}");
+            callST.setString(1, catalog.getCatalogId());
+            callST.setString(2, catalog.getCatalogName());
+            callST.setString(3, catalog.getDescription());
+            callST.setInt(4, catalog.getPriority());
+            callST.setBoolean(5, catalog.isStatus());
+            callST.setString(6, catalog.getParentId());
+            callST.registerOutParameter(7, Types.BOOLEAN);
+            callST.executeUpdate();
+            check = callST.getBoolean(7);
+        } catch (SQLException e) {
+        } finally {
+            ConnectionDB.closeConnection(con, callST);
+        }
+        return check;
     }
 }

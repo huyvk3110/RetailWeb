@@ -12,4 +12,5 @@ package app.define;
 public class TextDefine {
     public static final String txt_danhmuc = "Danh mục";
     public static final String txt_quanlydanhmuc  = "Quản lý danh mục";
+    public static final String txt_themlydanhmuc  = "Thêm danh mục";
 }

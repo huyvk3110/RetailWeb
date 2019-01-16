@@ -37,12 +37,12 @@
                                         <th>${catalog.description}</th>
                                         <th>${catalog.view}</th>
                                         <th>${catalog.parentId}</th>
-                                        <th>${catalog.status==true? "active":"inactive"}</th>
+                                        <th class="${catalog.status==true?"":"text-danger"}">${catalog.status==true? "active":"inactive"}</th>
                                         <th>
-                                            <button class="btn btn-secondary">
+                                            <button onclick="location.href='toggle.htm?catalogId=${catalog.catalogId}'" class="btn ${catalog.status==true?"btn-secondary":"btn-success"}">
                                                 <i class="fas fa-check"></i>
                                             </button>
-                                            <button class="btn btn-info">
+                                            <button onclick="location.href='catalog-edit.htm?catalogId=${catalog.catalogId}'" class="btn btn-info">
                                                 <i class="fas fa-pen"></i>
                                             </button>
                                             <button class="btn btn-danger">

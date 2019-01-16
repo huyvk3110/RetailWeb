@@ -26,7 +26,7 @@
           </a>
           <ul class="treeview-menu">
             <li><a href="catalog-manager.htm">Quản lý danh mục</a></li>
-            <li><a href="">Thêm danh mục</a></li>
+            <li><a href="catalog-insert.htm">Thêm danh mục</a></li>
           </ul>
         </li>
         <li class="treeview">
@@ -37,8 +37,8 @@
             </span>
           </a>
           <ul class="treeview-menu">
-            <li><a href="">Quản lý sản phẩm</a></li>
-            <li><a href="">Thêm sản phẩm</a></li>
+            <li><a href="catalog-manager.htm">Quản lý sản phẩm</a></li>
+            <li><a href="catalog-insert.htm">Thêm sản phẩm</a></li>
           </ul>
         </li>
         <li>
