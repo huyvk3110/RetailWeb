@@ -18,7 +18,7 @@ import org.springframework.web.servlet.ModelAndView;
 public class ProductController {
     @RequestMapping(value = "getAll")
     public ModelAndView getAll(){
-        ModelAndView mav = new ModelAndView("index");
+        ModelAndView mav = new ModelAndView("backend/index");
         return mav;
     }
 }
