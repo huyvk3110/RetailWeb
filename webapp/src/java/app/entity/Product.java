@@ -6,6 +6,7 @@
 package app.entity;
 
 import java.util.Date;
+import java.util.List;
 
 /**
  *
@@ -25,13 +26,15 @@ public class Product {
     private long view;
     private long sold;
     private Date created;
-    private boolean status;
+    private boolean status = true;
     private String catalogId;
+    private String catalogName;
+    private List<Specification> specification;
 
     public Product() {
     }
 
-    public Product(String productId, String productName, float priceOutput, int discount, int quantity, int quality, String title, int guarantee, int oneSwitchOne, String description, long view, long sold, Date created, boolean status, String catalogId) {
+    public Product(String productId, String productName, float priceOutput, int discount, int quantity, int quality, String title, int guarantee, int oneSwitchOne, String description, long view, long sold, Date created, String catalogId, String catalogName, List<Specification> specification) {
         this.productId = productId;
         this.productName = productName;
         this.priceOutput = priceOutput;
@@ -45,10 +48,29 @@ public class Product {
         this.view = view;
         this.sold = sold;
         this.created = created;
-        this.status = status;
         this.catalogId = catalogId;
+        this.catalogName = catalogName;
+        this.specification = specification;
     }
 
+    public String getCatalogName() {
+        return catalogName;
+    }
+
+    public void setCatalogName(String catalogName) {
+        this.catalogName = catalogName;
+    }
+    
+    
+
+    public List<Specification> getSpecification() {
+        return specification;
+    }
+
+    public void setSpecification(List<Specification> specification) {
+        this.specification = specification;
+    }
+    
     public String getProductId() {
         return productId;
     }

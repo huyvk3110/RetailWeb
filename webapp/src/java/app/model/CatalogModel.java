@@ -22,20 +22,19 @@ import java.util.List;
 public class CatalogModel {
 //    public static void main(String[] args) {
 //        CatalogModel model = new CatalogModel();
-////        List<Catalog> list = model.getAllMainCatalog();
-////        for (Catalog catalog : list) {
-////            System.out.println("Catalog: " + catalog.getCatalogName());
-////        }
-//////        System.out.println("Product: " + model.getCatalogById("CA008").getCatalogName());
+//        //Insert
+//        Catalog catalog = new Catalog("CA099", "Huy", "Huy", 0, 5, true, "CA001");
+//        boolean check = model.insertCatalog(catalog);
+//        System.out.println("Check is " + check);
 //        
-//        Catalog catalog = new Catalog("CA012", "TEST haha", "TEST", 2, 1, true, "CA001");
-//        if(model.updateCatalog(catalog)) {
-//            System.out.println("Insert done");
-//        }else {
-//            System.out.println("Insert fails");
+//        //Get all
+//        List<Catalog> list = model.getAllCatalog(true);
+//        for (Catalog cat : list) {
+//            System.out.println("Catalog: " + cat.getCatalogName());
 //        }
 //    }
     
+    //**************************Select**************************//
     public List<Catalog> getAllCatalog(boolean isAdmin) {
         Connection con = null;
         CallableStatement callST = null;
@@ -54,6 +53,9 @@ public class CatalogModel {
                 catalog.setPriority(rs.getInt("Priority"));
                 catalog.setStatus(rs.getBoolean("Status"));
                 catalog.setParentId(rs.getString("ParentId"));
+                //Set parent name
+                Catalog parent = getCatalogById(catalog.getParentId());
+                catalog.setParentName((parent != null)? parent.getCatalogName():"");
                 list.add(catalog);
             }
         } catch (SQLException e) {
@@ -85,6 +87,9 @@ public class CatalogModel {
                 catalog.setPriority(rs.getInt("Priority"));
                 catalog.setStatus(rs.getBoolean("Status"));
                 catalog.setParentId(rs.getString("ParentId"));
+                //Set parent name
+                Catalog parent = getCatalogById(catalog.getParentId());
+                catalog.setParentName((parent != null)? parent.getCatalogName():"");
             }
         } catch (SQLException e) {
         } finally {
@@ -135,6 +140,9 @@ public class CatalogModel {
                 catalog.setPriority(rs.getInt("Priority"));
                 catalog.setStatus(rs.getBoolean("Status"));
                 catalog.setParentId(rs.getString("ParentId"));
+                //Set parent name
+                Catalog parent = getCatalogById(parentId);
+                catalog.setParentName((parent != null)? parent.getCatalogName():"");
                 list.add(catalog);
             }
         } catch (SQLException e) {
@@ -152,55 +160,24 @@ public class CatalogModel {
         return this.getCatalogByParentId("",false);
     }
     
-    public void toggleCatalog(String catalogId) {
+    //**************************Update**************************//
+    public boolean toggleCatalog(String catalogId) {
         Connection con = null;
         CallableStatement callST = null;
+        boolean result = false;
         try {
             con = ConnectionDB.openConnection();
-            callST = con.prepareCall("{call toggleCatalog(?)}");
+            callST = con.prepareCall("{call toggleCatalog(?,?)}");
             callST.setString(1, catalogId);
-            callST.executeUpdate();
-        } catch (SQLException e) {
-        } finally {
-            ConnectionDB.closeConnection(con, callST);
-        }
-    }
-    
-    public void deleteCatalog(String catalogId) {
-        Connection con = null;
-        CallableStatement callST = null;
-        try {
-            con = ConnectionDB.openConnection();
-            callST = con.prepareCall("{call deleteCatalog(?)}");
-            callST.setString(1, catalogId);
-            callST.executeUpdate();
-        } catch (SQLException e) {
-        } finally {
-            ConnectionDB.closeConnection(con, callST);
-        }
-    }
-    
-    public boolean insertCatalog(Catalog catalog) {
-        Connection con = null;
-        CallableStatement callST = null;
-        boolean check = false;
-        try {
-            con = ConnectionDB.openConnection();
-            callST = con.prepareCall("{call insertCatalog(?,?,?,?,?,?,?)}");
-            callST.setString(1, catalog.getCatalogId());
-            callST.setString(2, catalog.getCatalogName());
-            callST.setString(3, catalog.getDescription());
-            callST.setInt(4, catalog.getPriority());
-            callST.setBoolean(5, catalog.isStatus());
-            callST.setString(6, catalog.getParentId());
-            callST.registerOutParameter(7, Types.BOOLEAN);
+            callST.registerOutParameter(2, Types.BOOLEAN);
             callST.execute();
-            check = callST.getBoolean(7);
+            result = callST.getBoolean(2);
         } catch (SQLException e) {
+            e.printStackTrace();
         } finally {
             ConnectionDB.closeConnection(con, callST);
         }
-        return check;
+        return result;
     }
     
     public boolean updateCatalog(Catalog catalog) {
@@ -218,6 +195,50 @@ public class CatalogModel {
             callST.setString(6, catalog.getParentId());
             callST.registerOutParameter(7, Types.BOOLEAN);
             callST.executeUpdate();
+            check = callST.getBoolean(7);
+        } catch (SQLException e) {
+        } finally {
+            ConnectionDB.closeConnection(con, callST);
+        }
+        return check;
+    }
+    
+    //**************************Delete**************************//
+    public boolean deleteCatalog(String catalogId) {
+        Connection con = null;
+        CallableStatement callST = null;
+        boolean result = false;
+        try {
+            con = ConnectionDB.openConnection();
+            callST = con.prepareCall("{call deleteCatalog(?,?)}");
+            callST.setString(1, catalogId);
+            callST.registerOutParameter(2, Types.BOOLEAN);
+            callST.execute();
+            result = callST.getBoolean(2);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            ConnectionDB.closeConnection(con, callST);
+        }
+        return result;
+    }
+    
+    //**************************Insert**************************//
+    public boolean insertCatalog(Catalog catalog) {
+        Connection con = null;
+        CallableStatement callST = null;
+        boolean check = false;
+        try {
+            con = ConnectionDB.openConnection();
+            callST = con.prepareCall("{call insertCatalog(?,?,?,?,?,?,?)}");
+            callST.setString(1, catalog.getCatalogId());
+            callST.setString(2, catalog.getCatalogName());
+            callST.setString(3, catalog.getDescription());
+            callST.setInt(4, catalog.getPriority());
+            callST.setBoolean(5, catalog.isStatus());
+            callST.setString(6, catalog.getParentId());
+            callST.registerOutParameter(7, Types.BOOLEAN);
+            callST.execute();
             check = callST.getBoolean(7);
         } catch (SQLException e) {
         } finally {

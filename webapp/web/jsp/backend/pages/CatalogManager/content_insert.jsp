@@ -16,24 +16,49 @@
         <div class="box-body">
             <div class="row">
                 <div class="col">
-                    <f:form action="insert.html" commandName="catalog">
+                    <f:form action="catalog-insert.htm" commandName="catalog">
                         <div class="form-group">
-                            <h5>Name <span class="text-danger">*</span></h5>
+                            <h5>ID danh mục<span class="text-danger">*</span></h5>
                             <div class="controls">
-                                <f:input path="${catalogId}" class="form-control"/></div>
+                                <f:input path="catalogId" value="${catalogId}"  class="form-control" readonly="true"/></div>
                         </div>
                         <div class="form-group">
-                            <h5>Description</h5>
+                            <h5>Tên danh mục</h5>
                             <div class="controls">
-                                <f:input path="${description}" class="form-control"/></div>
+                                <f:input path="catalogName" class="form-control"/></div>
                         </div>
                         <div class="form-group">
-                            <h5>Parent</h5>
+                            <h5>Mô tả</h5>
                             <div class="controls">
-                                <f:input path="${parentId}" class="form-control"/></div>
+                                <f:input path="description" class="form-control"/></div>
+                        </div>
+                        <div class="form-group">
+                            <h5>Độ ưu tiên danh mục</h5>
+                            <div class="controls">
+                                <f:input path="priority" class="form-control"/></div>
+                        </div>
+                        <div class="form-group">
+                            <h5>Danh mục cha</h5>
+                            <div class="controls">
+                                <f:select path="parentId" id="parentId" name="select" class="form-control">
+                                    <f:option value="" label="Danh mục chính"/>
+                                    <c:forEach items="${listcatalog}" var="_cat">
+                                        <f:option value="${_cat.catalogId}" label="${_cat.catalogName}"/>
+                                    </c:forEach>
+                                </f:select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <h5>Trạng thái</h5>
+                            <div class="controls">
+                                <f:select path="status"  id="status" name="select" class="form-control">
+                                    <f:option value="true" label="Kích hoạt"/>
+                                    <f:option value="false" label="Không kích hoạt"/>
+                                </f:select>
+                            </div>
                         </div>
                         <div class="text-xs-right">
-                            <button type="submit" class="btn btn-info">Submit</button>
+                            <input type="submit" value="Insert" class="btn btn-info">
                         </div>
                     </f:form>
 

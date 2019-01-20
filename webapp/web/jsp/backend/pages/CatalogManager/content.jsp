@@ -11,9 +11,6 @@
     <div class="row">
         <div class="col-12">
             <div class="box">
-                <div class="box-header with-border">
-                    <h3 class="box-title">Data Table With Full Features</h3>
-                </div>
                 <!-- /.box-header -->
                 <div class="box-body">
                     <div class="table-responsive">
@@ -21,47 +18,90 @@
                             <thead>
                                 <tr>
                                     <th>ID</th>
-                                    <th>Name</th>
-                                    <th>Description</th>
-                                    <th>View</th>
-                                    <th>Parent</th>
-                                    <th>Status</th>
-                                    <th>Action</th>
+                                    <th>Tênh</th>
+                                    <th>Mô tả</th>
+                                    <th>Lượt xem</th>
+                                    <th>Danh mục cha</th>
+                                    <th>Trạng thái</th>
+                                    <th>Hành động</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 <c:forEach items="${listCatalog}" var="catalog">
-                                    <tr>
+                                    <tr id="catalog-item-${catalog.catalogId}">
                                         <th>${catalog.catalogId}</th>
                                         <th>${catalog.catalogName}</th>
                                         <th>${catalog.description}</th>
                                         <th>${catalog.view}</th>
-                                        <th>${catalog.parentId}</th>
-                                        <th class="${catalog.status==true?"":"text-danger"}">${catalog.status==true? "active":"inactive"}</th>
-                                        <th>
-                                            <button onclick="location.href='toggle.htm?catalogId=${catalog.catalogId}'" class="btn ${catalog.status==true?"btn-secondary":"btn-success"}">
+                                        <th>${catalog.parentName}</th>
+                                        <th id="catalog-status-${catalog.catalogId}"></th>
+                                        <th class="d-block">
+                                            <button id="catalog-toggle-${catalog.catalogId}" onclick="onClickToggle('${catalog.catalogId}')" class="btn btn-action">
                                                 <i class="fas fa-check"></i>
                                             </button>
-                                            <button onclick="location.href='catalog-edit.htm?catalogId=${catalog.catalogId}'" class="btn btn-info">
+                                            <button onclick="location.href = 'catalog-goedit.htm?catalogId=${catalog.catalogId}'" class="btn btn-action btn-info">
                                                 <i class="fas fa-pen"></i>
                                             </button>
-                                            <button class="btn btn-danger">
+<!--                                            <button onclick="location.href = 'catalog_delete.htm?catalogId=${catalog.catalogId}'" class="btn btn-action btn-danger">
+                                                <i class="fas fa-trash-alt"></i>
+                                            </button>-->
+                                            <button onclick="onClickDelete('${catalog.catalogId}')" class="btn btn-action btn-danger">
                                                 <i class="fas fa-trash-alt"></i>
                                             </button>
                                         </th>
-                                    </tr>
-                                </c:forEach>
-                            </tbody>
-                            <tfoot>
-                                <tr>
-                                    <th>Name</th>
-                                    <th>Position</th>
-                                    <th>Office</th>
-                                    <th>Age</th>
-                                    <th>Start date</th>
-                                    <th>Salary</th>
+                                        <script>
+                                            //Function
+                                            function initDataStatus(catalogId,status) {
+                                                if(typeof status !== 'boolean') return;
+                                                document.getElementById('catalog-status-'+catalogId).innerHTML = (status==true)? "Kích hoạt":"Không kích hoạt";
+                                                document.getElementById('catalog-status-'+catalogId).className = (status==true)?"":"text-danger";
+                                                document.getElementById('catalog-toggle-' + catalogId).className = "btn btn-action " + ((status==true)?"btn-secondary":"btn-success");
+                                            }
+                                            
+                                            function onClickDelete(catalogId) {
+                                                $.ajax({
+                                                    url: 'catalog_delete.htm?catalogId=' + catalogId,
+                                                    type: 'GET',
+                                                    dataType: 'json',
+                                                    success: function (result) {
+                                                        console.log('Delete output',result);
+                                                        var check = result.delete_result;
+                                                        if(typeof check === 'boolean' && check) {
+                                                            var element = document.getElementById('catalog-item-'+catalogId);
+                                                            element.parentNode.removeChild(element);
+                                                        }
+                                                    },
+                                                    error: function (result) {
+                                                        console.log('Error output',result);
+                                                    }
+                                                })
+                                            }
+                                            
+                                            function onClickToggle(catalogId) {
+                                                $.ajax({
+                                                    url: 'catalog_toggle.htm?catalogId=' + catalogId,
+                                                    type: 'GET',
+                                                    dataType: 'json',
+                                                    success: function (result) {
+                                                        console.log('Success', result);
+                                                        var status = result.status;
+                                                        if(typeof status === 'boolean') {
+                                                           console.log("Success:",$("#catalog-status" + catalogId));
+                                                           initDataStatus(catalogId,status);
+                                                        }
+                                                    },
+                                                    error: function (result) {
+                                                        console.log('Error', result);
+                                                    }
+                                                })
+                                            }
+                                            
+                                            //Create data
+                                            initDataStatus('${catalog.catalogId}',${catalog.status});
+                                        </script>
                                 </tr>
-                            </tfoot>
+                            </c:forEach>
+                            </tbody>
                         </table>
                     </div>
                 </div>

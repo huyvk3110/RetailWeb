@@ -13,6 +13,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Types;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -22,11 +23,55 @@ import java.util.List;
 public class ProductModel {
 //    public static void main(String[] args) {
 //        ProductModel model = new ProductModel();
-//        List<Product> list = model.getProductByCatalog("CA008");
+//        Product pro = new Product("PM00007", "New", 100000, 10, 1000, 100, "Hahahaha", 365, 10, "Hahaha", 0, 0, new Date(2018, 10, 31), true, "CA011");
+//        model.insertProduct(pro);
+//        List<Product> list = model.getAllProduct(true);
 //        for (Product product : list) {
 //            System.out.println("Product: " + product.getProductName());
 //        }
 //    }
+    CatalogModel catalogModel = null;
+    
+    public ProductModel() {
+        catalogModel = new CatalogModel();
+    }
+
+    //****************************Select****************************//
+    public List<Product> getAllProduct(boolean isAdmin) {
+        Connection con = null;
+        CallableStatement callST = null;
+        List<Product> list = new ArrayList<>();
+        try {
+            con = ConnectionDB.openConnection();
+            callST = con.prepareCall("{call getAllProduct(?)}");
+            callST.setBoolean(1, isAdmin);
+            ResultSet rs = callST.executeQuery();
+            while(rs.next()) {
+                Product product = new Product();
+                product.setProductId(rs.getString("ProductId"));
+                product.setProductName(rs.getString("ProductName"));
+                product.setPriceOutput(rs.getFloat("PriceOutput"));
+                product.setDiscount(rs.getInt("Discount"));
+                product.setQuantity(rs.getInt("Quantity"));
+                product.setQuality(rs.getInt("Quality"));
+                product.setTitle(rs.getString("Title"));
+                product.setGuarantee(rs.getInt("Guarantee"));
+                product.setOneSwitchOne(rs.getInt("OneSwitchOne"));
+                product.setDescription(rs.getString("Description"));
+                product.setView(rs.getLong("View"));
+                product.setSold(rs.getLong("Sold"));
+                product.setCreated(rs.getDate("Created"));
+                product.setStatus(rs.getBoolean("Status"));
+                product.setCatalogId(rs.getString("CatalogId"));
+                product.setCatalogName(catalogModel.getCatalogById(rs.getString("CatalogId")).getCatalogName());
+                list.add(product);
+            }
+        } catch (SQLException e) {
+        } finally {
+            ConnectionDB.closeConnection(con, callST);
+        }
+        return list;
+    }
     
     public List<Product> getProductByCatalog(String catId, int numProduct, boolean isAdmin) {
         Connection con = null;
@@ -57,6 +102,7 @@ public class ProductModel {
                 product.setCreated(rs.getDate("Created"));
                 product.setStatus(rs.getBoolean("Status"));
                 product.setCatalogId(rs.getString("CatalogId"));
+                product.setCatalogName(catalogModel.getCatalogById(rs.getString("CatalogId")).getCatalogName());
                 list.add(product);
             }
         } catch (SQLException e) {
@@ -105,6 +151,7 @@ public class ProductModel {
                 product.setCreated(rs.getDate("Created"));
                 product.setStatus(rs.getBoolean("Status"));
                 product.setCatalogId(rs.getString("CatalogId"));
+                product.setCatalogName(catalogModel.getCatalogById(rs.getString("CatalogId")).getCatalogName());
                 list.add(product);
             }
         } catch (SQLException e) {
@@ -141,6 +188,7 @@ public class ProductModel {
                 product.setCreated(rs.getDate("Created"));
                 product.setStatus(rs.getBoolean("Status"));
                 product.setCatalogId(rs.getString("CatalogId"));
+                product.setCatalogName(catalogModel.getCatalogById(rs.getString("CatalogId")).getCatalogName());
                 list.add(product);
             }
         } catch (SQLException e) {
@@ -177,6 +225,7 @@ public class ProductModel {
                 product.setCreated(rs.getDate("Created"));
                 product.setStatus(rs.getBoolean("Status"));
                 product.setCatalogId(rs.getString("CatalogId"));
+                product.setCatalogName(catalogModel.getCatalogById(rs.getString("CatalogId")).getCatalogName());
                 list.add(product);
             }
         } catch (SQLException e) {
@@ -213,6 +262,7 @@ public class ProductModel {
                 product.setCreated(rs.getDate("Created"));
                 product.setStatus(rs.getBoolean("Status"));
                 product.setCatalogId(rs.getString("CatalogId"));
+                product.setCatalogName(catalogModel.getCatalogById(rs.getString("CatalogId")).getCatalogName());
                 list.add(product);
             }
         } catch (SQLException e) {
@@ -247,6 +297,7 @@ public class ProductModel {
                 product.setCreated(rs.getDate("Created"));
                 product.setStatus(rs.getBoolean("Status"));
                 product.setCatalogId(rs.getString("CatalogId"));
+                product.setCatalogName(catalogModel.getCatalogById(rs.getString("CatalogId")).getCatalogName());
             }
         } catch (SQLException e) {
         } finally {
@@ -282,6 +333,7 @@ public class ProductModel {
                 product.setCreated(rs.getDate("Created"));
                 product.setStatus(rs.getBoolean("Status"));
                 product.setCatalogId(rs.getString("CatalogId"));
+                product.setCatalogName(catalogModel.getCatalogById(rs.getString("CatalogId")).getCatalogName());
                 list.add(product);
             }
         } catch (SQLException e) {
@@ -318,6 +370,7 @@ public class ProductModel {
                 product.setCreated(rs.getDate("Created"));
                 product.setStatus(rs.getBoolean("Status"));
                 product.setCatalogId(rs.getString("CatalogId"));
+                product.setCatalogName(catalogModel.getCatalogById(rs.getString("CatalogId")).getCatalogName());
                 list.add(product);
             }
         } catch (SQLException e) {
@@ -389,11 +442,111 @@ public class ProductModel {
                 product.setCreated(rs.getDate("Created"));
                 product.setStatus(rs.getBoolean("Status"));
                 product.setCatalogId(rs.getString("CatalogId"));
+                product.setCatalogName(catalogModel.getCatalogById(rs.getString("CatalogId")).getCatalogName());
             }
         } catch (SQLException e) {
         } finally {
             ConnectionDB.closeConnection(con, callST);
         }
         return product;
+    }
+    
+    //****************************Insert****************************//
+    public boolean insertProduct(Product product) {
+        Connection con = null;
+        CallableStatement callST = null;
+        boolean check = false;
+        try {
+            con = ConnectionDB.openConnection();
+            callST = con.prepareCall("{call createProduct(?,?,?,?,?,?,?,?,?,?,?,?,?)}");
+            callST.setString(1, product.getProductId());
+            callST.setString(2, product.getProductName());
+            callST.setFloat(3, product.getPriceOutput());
+            callST.setInt(4, product.getDiscount());
+            callST.setInt(5, product.getQuantity());
+            callST.setInt(6, product.getQuality());
+            callST.setString(7, product.getTitle());
+            callST.setInt(8, product.getGuarantee());
+            callST.setInt(9, product.getOneSwitchOne());
+            callST.setString(10, product.getDescription());
+            callST.setBoolean(11, product.isStatus());
+            callST.setString(12, product.getCatalogId());
+            callST.registerOutParameter(13, Types.BOOLEAN);
+            callST.execute();
+            check = callST.getBoolean(13);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            ConnectionDB.closeConnection(con, callST);
+        }
+        return check;
+    }
+    
+    public boolean updateProduct(Product product) {
+        Connection con = null;
+        CallableStatement callST = null;
+        boolean check = false;
+        try {
+            con = ConnectionDB.openConnection();
+            callST = con.prepareCall("{call updateProduct(?,?,?,?,?,?,?,?,?,?,?,?,?)}");
+            callST.setString(1, product.getProductId());
+            callST.setString(2, product.getProductName());
+            callST.setFloat(3, product.getPriceOutput());
+            callST.setInt(4, product.getDiscount());
+            callST.setInt(5, product.getQuantity());
+            callST.setInt(6, product.getQuality());
+            callST.setString(7, product.getTitle());
+            callST.setInt(8, product.getGuarantee());
+            callST.setInt(9, product.getOneSwitchOne());
+            callST.setString(10, product.getDescription());
+            callST.setBoolean(11, product.isStatus());
+            callST.setString(12, product.getCatalogId());
+            callST.registerOutParameter(13, Types.BOOLEAN);
+            callST.execute();
+            check = callST.getBoolean(13);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            ConnectionDB.closeConnection(con, callST);
+        }
+        return check;
+    }
+    
+    public boolean deleteProduct(String productId) {
+        Connection con = null;
+        CallableStatement callST = null;
+        boolean result = false;
+        try {
+            con = ConnectionDB.openConnection();
+            callST = con.prepareCall("{call deleteProduct(?,?)}");
+            callST.setString(1, productId);
+            callST.registerOutParameter(2, Types.BOOLEAN);
+            callST.execute();
+            result = callST.getBoolean(2);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            ConnectionDB.closeConnection(con, callST);
+        }
+        return result;
+    }
+    
+    public boolean toggleProduct(String productId) {
+        Connection con = null;
+        CallableStatement callST = null;
+        boolean result = false;
+        try {
+            con = ConnectionDB.openConnection();
+            callST = con.prepareCall("{call toggleProduct(?,?)}");
+            callST.setString(1, productId);
+            callST.registerOutParameter(2, Types.BOOLEAN);
+            callST.execute();
+            result = callST.getBoolean(2);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            ConnectionDB.closeConnection(con, callST);
+        }
+        return result;
     }
 }

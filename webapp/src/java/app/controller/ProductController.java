@@ -14,7 +14,7 @@ import org.springframework.web.servlet.ModelAndView;
  * @author huy
  */
 @Controller
-@RequestMapping(value = "index")
+@RequestMapping(value = "admin")
 public class ProductController {
     @RequestMapping(value = "getAll")
     public ModelAndView getAll(){

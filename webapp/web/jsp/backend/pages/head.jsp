@@ -27,6 +27,9 @@
 	
 	<!-- Qixa Admin skins -->
 	<link rel="stylesheet" href="../jsp/backend/css/skins/_all-skins.css">	
+        
+        <!--Jquery-->
+        <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
 	  
     <!-- morris CSS -->	
 	<link rel="stylesheet" href="http://pixaq-admin-templates.wordpressthemeshub.com/assets/vendor_components/morris.js/morris.css">

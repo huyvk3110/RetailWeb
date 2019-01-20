@@ -15,13 +15,14 @@ public class Catalog {
     private String description;
     private long view;
     private int priority;
-    private boolean status;
+    private boolean status = true;
     private String parentId;
+    private String parentName;
 
     public Catalog() {
     }
 
-    public Catalog(String catalogId, String catalogName, String description, long view, int priority, boolean status, String parentId) {
+    public Catalog(String catalogId, String catalogName, String description, long view, int priority, boolean status, String parentId, String parentName) {
         this.catalogId = catalogId;
         this.catalogName = catalogName;
         this.description = description;
@@ -29,6 +30,15 @@ public class Catalog {
         this.priority = priority;
         this.status = status;
         this.parentId = parentId;
+        this.parentName = parentName;
+    }
+
+    public String getParentName() {
+        return parentName;
+    }
+
+    public void setParentName(String parentName) {
+        this.parentName = parentName;
     }
     
     public String getCatalogId() {
