@@ -1,7 +1,7 @@
 ﻿<!DOCTYPE html>
 <html lang="vi">
     <jsp:include page="../head.jsp"></jsp:include>
-    <link rel="stylesheet" href="../jsp/backend/pages/CatalogManager/catalog_manager.css">	
+    <link rel="stylesheet" href="../jsp/backend/css/custom/button-custom.css">	
         <body class="hold-transition skin-black dark-sidebar sidebar-mini">
             <div class="wrapper">
                 <!-- Header bar-->

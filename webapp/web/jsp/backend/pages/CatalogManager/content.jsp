@@ -7,6 +7,8 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
+<link rel="stylesheet" href="../jsp/backend/css/custom/button-custom.css">	
+<jsp:include page="../content_header.jsp"></jsp:include>
 <section class="content">
     <div class="row">
         <div class="col-12">
@@ -36,69 +38,20 @@
                                         <th>${catalog.parentName}</th>
                                         <th id="catalog-status-${catalog.catalogId}"></th>
                                         <th class="d-block">
-                                            <button id="catalog-toggle-${catalog.catalogId}" onclick="onClickToggle('${catalog.catalogId}')" class="btn btn-action">
+                                            <button id="catalog-toggle-${catalog.catalogId}" onclick="onClickToggleCatalog('${catalog.catalogId}')" class="btn btn-action">
                                                 <i class="fas fa-check"></i>
                                             </button>
                                             <button onclick="location.href = 'catalog-goedit.htm?catalogId=${catalog.catalogId}'" class="btn btn-action btn-info">
                                                 <i class="fas fa-pen"></i>
                                             </button>
-<!--                                            <button onclick="location.href = 'catalog_delete.htm?catalogId=${catalog.catalogId}'" class="btn btn-action btn-danger">
-                                                <i class="fas fa-trash-alt"></i>
-                                            </button>-->
-                                            <button onclick="onClickDelete('${catalog.catalogId}')" class="btn btn-action btn-danger">
+                                            <button onclick="onClickDeleteCatalog('${catalog.catalogId}')" class="btn btn-action btn-danger">
                                                 <i class="fas fa-trash-alt"></i>
                                             </button>
                                         </th>
-                                        <script>
-                                            //Function
-                                            function initDataStatus(catalogId,status) {
-                                                if(typeof status !== 'boolean') return;
-                                                document.getElementById('catalog-status-'+catalogId).innerHTML = (status==true)? "Kích hoạt":"Không kích hoạt";
-                                                document.getElementById('catalog-status-'+catalogId).className = (status==true)?"":"text-danger";
-                                                document.getElementById('catalog-toggle-' + catalogId).className = "btn btn-action " + ((status==true)?"btn-secondary":"btn-success");
-                                            }
-                                            
-                                            function onClickDelete(catalogId) {
-                                                $.ajax({
-                                                    url: 'catalog_delete.htm?catalogId=' + catalogId,
-                                                    type: 'GET',
-                                                    dataType: 'json',
-                                                    success: function (result) {
-                                                        console.log('Delete output',result);
-                                                        var check = result.delete_result;
-                                                        if(typeof check === 'boolean' && check) {
-                                                            var element = document.getElementById('catalog-item-'+catalogId);
-                                                            element.parentNode.removeChild(element);
-                                                        }
-                                                    },
-                                                    error: function (result) {
-                                                        console.log('Error output',result);
-                                                    }
-                                                })
-                                            }
-                                            
-                                            function onClickToggle(catalogId) {
-                                                $.ajax({
-                                                    url: 'catalog_toggle.htm?catalogId=' + catalogId,
-                                                    type: 'GET',
-                                                    dataType: 'json',
-                                                    success: function (result) {
-                                                        console.log('Success', result);
-                                                        var status = result.status;
-                                                        if(typeof status === 'boolean') {
-                                                           console.log("Success:",$("#catalog-status" + catalogId));
-                                                           initDataStatus(catalogId,status);
-                                                        }
-                                                    },
-                                                    error: function (result) {
-                                                        console.log('Error', result);
-                                                    }
-                                                })
-                                            }
-                                            
-                                            //Create data
-                                            initDataStatus('${catalog.catalogId}',${catalog.status});
-                                        </script>
+                                <script>
+                                    //Create data
+                                    initDataStatusCatalog('${catalog.catalogId}',${catalog.status});
+                                </script>
                                 </tr>
                             </c:forEach>
                             </tbody>
@@ -112,4 +65,6 @@
         <!-- /.col -->
     </div>
     <!-- /.row -->
+    <script src="../jsp/backend/js/pages/datatables.min.js"></script>   
+    <script src="../jsp/backend/js/pages/data-table.js"></script>
 </section>

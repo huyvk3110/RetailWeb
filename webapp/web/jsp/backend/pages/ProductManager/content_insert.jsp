@@ -8,8 +8,9 @@
 <%@ taglib uri="http://www.springframework.org/tags/form" prefix="f" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
+<link rel="stylesheet" href="../jsp/backend/css/custom/button-custom.css">	
+<jsp:include page="../content_header.jsp"></jsp:include>
 <section class="content">
-
     <!-- Basic Forms -->
     <div class="box">
         <!-- /.box-header -->

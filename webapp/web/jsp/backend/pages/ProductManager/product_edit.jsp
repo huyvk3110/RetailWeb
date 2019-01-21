@@ -1,7 +1,7 @@
 ﻿<!DOCTYPE html>
 <html lang="vi">
     <jsp:include page="../head.jsp"></jsp:include>
-    <link rel="stylesheet" href="../jsp/backend/pages/CatalogManager/catalog_manager.css">	
+    <link rel="stylesheet" href="../jsp/backend/css/custom/button-custom.css">      
         <body class="hold-transition skin-black dark-sidebar sidebar-mini">
             <div class="wrapper">
                 <!-- Header bar-->
@@ -51,8 +51,6 @@
         <script src="../jsp/backend/js/template.js"></script>
         <script src="../jsp/backend/js/pages/datatables.min.js"></script>   
         <script src="../jsp/backend/js/pages/data-table.js"></script>
-
     </body>
-
     <!-- Mirrored from pixaq-admin-templates.wordpressthemeshub.com/main/index.html by HTTrack Website Copier/3.x [XR&CO'2014], Mon, 07 Jan 2019 15:22:16 GMT -->
 </html>

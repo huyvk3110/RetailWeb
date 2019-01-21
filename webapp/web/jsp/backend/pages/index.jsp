@@ -12,7 +12,10 @@
                 <!-- Content Wrapper. Contains page content -->
                 <div class="content-wrapper">
                     <!-- Content Header (Page header) -->
-                <jsp:include page="content_header.jsp"></jsp:include>
+                <%--<jsp:include page="content_header.jsp"></jsp:include>--%>
+                <%--<jsp:include page="content_header.jsp"></jsp:include>--%>
+                
+                <div id="root"></div>
 
                     <!-- Main content -->
                 <jsp:include page="content.jsp"></jsp:include>
@@ -48,6 +51,9 @@
 
         <!-- Qixa Admin dashboard demo (This is only for demo purposes) -->
         <script src="../jsp/backend/js/pages/dashboard.js"></script>
+        
+        <!-- Controller -->
+        <script src="../jsp/backend/js/backend-controller.js"></script>
 
     </body>
 
