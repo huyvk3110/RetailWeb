@@ -1,6 +1,5 @@
 //***************Navigation page***************//
-function gotoPage(e, url) {
-    e.preventDefault();
+function goPage(url) {
     console.log('Click success');
     $.ajax({
         url: url,
@@ -15,30 +14,55 @@ function gotoPage(e, url) {
     })
 }
 
+function goCatalogManager() {
+    var url = 'catalog-manager.htm';
+    goPage(url);
+}
+
+function goCatalogInsert() {
+    var url = 'catalog-goinsert.htm';
+    goPage(url);
+}
+
+function goProductManager() {
+    var url = 'product-manager.htm';
+    goPage(url);
+}
+
+function goProductInsert() {
+    var url = 'product-goinsert.htm';
+    goPage(url);
+}
+
+function goError() {
+    var url = 'error.htm';
+    goPage(url);
+}
+
 $(document).ready(function () {
     //Catalog manager
     $('#sidebar-catalog-manager').click(function (e) {
-        var url = 'catalog-manager.htm';
-        gotoPage(e, url);
+        e.preventDefault();
+        goCatalogManager();
     })
     //Catalog insert
     $('#sidebar-catalog-insert').click(function (e) {
-        var url = 'catalog-goinsert.htm';
-        gotoPage(e, url);
+        e.preventDefault();
+        goCatalogInsert();
     })
     //Catalog manager
     $('#sidebar-product-manager').click(function (e) {
-        var url = 'product-manager.htm';
-        gotoPage(e, url);
+        e.preventDefault();
+        goProductManager();
     })
     //Catalog insert
     $('#sidebar-product-insert').click(function (e) {
-        var url = 'product-goinsert.htm';
-        gotoPage(e, url);
+        e.preventDefault();
+        goProductInsert();
     })
 });
 
-//***************Catalog***************//
+//***************Product***************//
 function initDataStatusProduct(productId, status) {
     if (typeof status !== 'boolean')
         return;
@@ -83,6 +107,11 @@ function onClickToggleProduct(productId) {
             console.log('Error', result);
         }
     })
+}
+
+function onClickEditProduct(productId) {
+    var url = 'product-goedit.htm?productId=' + productId;
+    goPage(url);
 }
 
 //***************Catalog***************//
@@ -130,4 +159,9 @@ function onClickToggleCatalog(catalogId) {
             console.log('Error', result);
         }
     })
+}
+
+function onClickEditCatalog(catalogId) {
+    var url = 'catalog-goedit.htm?catalogId=' + catalogId;
+    goPage(url);
 }

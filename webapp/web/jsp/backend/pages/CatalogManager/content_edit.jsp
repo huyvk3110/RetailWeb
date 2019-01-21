@@ -16,7 +16,7 @@
         <div class="box-body">
             <div class="row">
                 <div class="col">
-                    <f:form action="catalog-edit.htm" commandName="catalog">
+                    <f:form action="catalog-edit.htm" commandName="catalog-edit">
                         <div class="form-group">
                             <h5>ID danh mục<span class="text-danger">*</span></h5>
                             <div class="controls">
@@ -70,4 +70,27 @@
         <!-- /.box-body -->
     </div>
     <!-- /.box -->
+    <script>
+        $('#catalog-edit').submit(function (e) {
+            e.preventDefault();
+            $.ajax({
+                url: 'catalog-edit.htm',
+                type: 'POST',
+                data: $(this).serialize(),
+                dataType: 'json',
+                success: function (result) {
+                    var check = result.editsuccess;
+                    if (check) {
+                        goCatalogManager();
+                    } else {
+                        goError(e);
+                    }
+                },
+                error: function (result) {
+                    console.log('Error');
+                    goError(e);
+                }
+            })
+        })
+    </script>
 </section>

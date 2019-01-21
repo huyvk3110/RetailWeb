@@ -9,15 +9,15 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <jsp:include page="../content_header.jsp"></jsp:include>
-<section class="content">
+    <section class="content">
 
-    <!-- Basic Forms -->
-    <div class="box">
-        <!-- /.box-header -->
-        <div class="box-body">
-            <div class="row">
-                <div class="col">
-                    <f:form action="catalog-insert.htm" commandName="catalog">
+        <!-- Basic Forms -->
+        <div class="box">
+            <!-- /.box-header -->
+            <div class="box-body">
+                <div class="row">
+                    <div class="col">
+                    <f:form action="catalog-insert.htm" commandName="catalog-insert">
                         <div class="form-group">
                             <h5>ID danh mục<span class="text-danger">*</span></h5>
                             <div class="controls">
@@ -62,7 +62,6 @@
                             <input type="submit" value="Insert" class="btn btn-info">
                         </div>
                     </f:form>
-
                 </div>
                 <!-- /.col -->
             </div>
@@ -71,5 +70,26 @@
         <!-- /.box-body -->
     </div>
     <!-- /.box -->
-
+    <script>
+        $('#catalog-insert').submit(function (e) {
+            e.preventDefault();
+            $.ajax({
+                url: 'catalog-insert.htm',
+                type: 'POST',
+                data: $(this).serialize(),
+                dataType: 'json',
+                success: function (result) {
+                    var check = result.insertsuccess;
+                    if (check) {
+                        goCatalogManager();
+                    } else {
+                        goError(e);
+                    }
+                },
+                error: function (result) {
+                    console.log('Error');
+                }
+            })
+        })
+    </script>
 </section>

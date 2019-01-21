@@ -32,16 +32,22 @@ public class AdminController {
         catalogModel = new CatalogModel();
         productModel = new ProductModel();
     }
-    
+
     @RequestMapping(value = "index")
     public ModelAndView goIndex() {
         ModelAndView mav = new ModelAndView("backend/pages/index");
         return mav;
     }
-
+    
+    @RequestMapping(value = "error")
+    public ModelAndView goError() {
+        ModelAndView mav = new ModelAndView("backend/pages/error");
+        return mav;
+    }
     //**********************************Catalog**********************************//
     @RequestMapping(value = "catalog-manager")
-    @ResponseBody public ModelAndView catalogManager() {
+    @ResponseBody
+    public ModelAndView catalogManager() {
         ModelAndView mav = new ModelAndView("backend/pages/CatalogManager/content");
         List<Catalog> listCat = catalogModel.getAllCatalog(true);
         mav.addObject("category", TextDefine.txt_danhmuc);
@@ -49,7 +55,7 @@ public class AdminController {
         mav.addObject("listCatalog", listCat);
         return mav;
     }
-    
+
     @RequestMapping(value = "catalog-goinsert")
     @ResponseBody public ModelAndView goCatalogInsert() {
         ModelAndView mav = new ModelAndView("backend/pages/CatalogManager/content_insert");
@@ -61,44 +67,37 @@ public class AdminController {
         int max = 0;
         for (Catalog cat : listCatalog) {
             int numId = Integer.parseInt(cat.getCatalogId().substring(2));
-            if(numId > max) max = numId;
+            if (numId > max) {
+                max = numId;
+            }
         }
         String catalogId = String.format("CA%03d", max + 1);
         //Add property
         mav.addObject("category", TextDefine.txt_danhmuc);
         mav.addObject("subcategory", TextDefine.txt_themlydanhmuc);
-        mav.addObject("catalog", catalog);
+        mav.addObject("catalog-insert", catalog);
         mav.addObject("listcatalog", listCatalog);
         mav.addObject("catalogId", catalogId);
         return mav;
     }
-    
-//    @RequestMapping(value = "catalog-insert")
-//    public String insertCatalog(Catalog catalog) {
-//        if (catalogModel.insertCatalog(catalog)) {
-//            return "redirect:catalog-manager.htm";
-//        } else {
-//            return "backend/pages/error";
-//        }
-//    }
+
     @RequestMapping(value = "catalog-insert")
-    public String insertCatalog(Catalog catalog) {
-        if (catalogModel.insertCatalog(catalog)) {
-            return "redirect:catalog-manager.htm";
-        } else {
-            return "backend/pages/error";
-        }
+    @ResponseBody public String insertCatalog(Catalog catalog) {
+        boolean result = catalogModel.insertCatalog(catalog);
+        JSONObject obj = new JSONObject();
+        obj.put("insertsuccess", result);
+        return obj.toJSONString();
     }
 
     @RequestMapping(value = "catalog-goedit")
-    public ModelAndView goCatalogEdit(String catalogId) {        
-        ModelAndView mav = new ModelAndView("backend/pages/CatalogManager/catalog_edit");
+    @ResponseBody public ModelAndView goCatalogEdit(String catalogId) {
+        ModelAndView mav = new ModelAndView("backend/pages/CatalogManager/content_edit");
         //Catalog new
-        Catalog catalog = catalogModel.getCatalogById(catalogId,true);
+        Catalog catalog = catalogModel.getCatalogById(catalogId, true);
         //Catalog parent select
         List<Catalog> listCatalog = catalogModel.getAllCatalog(true);
-        for (int i = 0; i<listCatalog.size() ; i++ ) {
-            if(listCatalog.get(i).getCatalogId().equals(catalogId)){
+        for (int i = 0; i < listCatalog.size(); i++) {
+            if (listCatalog.get(i).getCatalogId().equals(catalogId)) {
                 listCatalog.remove(i);
                 break;
             }
@@ -106,23 +105,23 @@ public class AdminController {
         //Add property
         mav.addObject("category", TextDefine.txt_danhmuc);
         mav.addObject("subcategory", TextDefine.txt_themlydanhmuc);
-        mav.addObject("catalog", catalog);
+        mav.addObject("catalog-edit", catalog);
         mav.addObject("listcatalog", listCatalog);
         mav.addObject("catalogId", catalogId);
         return mav;
     }
-    
+
     @RequestMapping(value = "catalog-edit")
-    public String editCatalog(Catalog catalog) {
-        if (catalogModel.updateCatalog(catalog)) {
-            return "redirect:catalog-manager.htm";
-        } else {
-            return "redirect:catalog-manager.htm";
-        }
+    @ResponseBody public String editCatalog(Catalog catalog) {
+        boolean result = catalogModel.updateCatalog(catalog);
+        JSONObject obj = new JSONObject();
+        obj.put("editsuccess", result);
+        return obj.toJSONString();
     }
 
     @RequestMapping(value = "catalog_toggle")
-    @ResponseBody public String toggleCatalog(String catalogId) {
+    @ResponseBody
+    public String toggleCatalog(String catalogId) {
         boolean result = catalogModel.toggleCatalog(catalogId);
         JSONObject obj = new JSONObject();
         obj.put("status", result);
@@ -130,14 +129,14 @@ public class AdminController {
     }
 
     @RequestMapping(value = "catalog_delete")
-    @ResponseBody public String deleteCatalog(String catalogId) {
+    @ResponseBody
+    public String deleteCatalog(String catalogId) {
         boolean result = catalogModel.deleteCatalog(catalogId);
         JSONObject obj = new JSONObject();
         obj.put("delete_result", result);
-//        return "redirect:catalog-manager.htm";
         return obj.toJSONString();
     }
-    
+
     //**********************************Product**********************************//
     @RequestMapping(value = "product-manager")
     public ModelAndView productManager() {
@@ -150,6 +149,7 @@ public class AdminController {
     }
 
     @RequestMapping(value = "product-goinsert")
+    @ResponseBody
     public ModelAndView goProductInsert() {
         ModelAndView mav = new ModelAndView("backend/pages/ProductManager/content_insert");
         //Product new
@@ -160,7 +160,9 @@ public class AdminController {
         int max = 0;
         for (Product pro : listProduct) {
             int numId = Integer.parseInt(pro.getProductId().substring(2));
-            if(numId > max) max = numId;
+            if (numId > max) {
+                max = numId;
+            }
         }
         String productId = String.format("PM%05d", max + 1);
         //Catalog
@@ -168,24 +170,25 @@ public class AdminController {
         //Add property
         mav.addObject("category", TextDefine.txt_danhmuc);
         mav.addObject("subcategory", TextDefine.txt_themlydanhmuc);
-        mav.addObject("product", product);
+        mav.addObject("product-insert", product);
         mav.addObject("listcatalog", listCatalog);
         mav.addObject("productId", productId);
         return mav;
     }
-    
+
     @RequestMapping(value = "product-insert")
+    @ResponseBody
     public String insertProduct(Product product) {
-        if (productModel.insertProduct(product)) {
-            return "redirect:product-manager.htm";
-        } else {
-            return "backend/pages/error";
-        }
+        boolean result = productModel.insertProduct(product);
+        JSONObject obj = new JSONObject();
+        obj.put("insertsuccess", result);
+        return obj.toJSONString();
     }
 
     @RequestMapping(value = "product-goedit")
-    public ModelAndView goProductEdit(String productId) {        
-        ModelAndView mav = new ModelAndView("backend/pages/ProductManager/product_edit");
+    @ResponseBody
+    public ModelAndView goProductEdit(String productId) {
+        ModelAndView mav = new ModelAndView("backend/pages/ProductManager/content_edit");
         //Catalog new
         Product product = productModel.getProductById(productId);
         //Catalog parent select
@@ -193,22 +196,23 @@ public class AdminController {
         //Add property
         mav.addObject("category", TextDefine.txt_danhmuc);
         mav.addObject("subcategory", TextDefine.txt_themlydanhmuc);
-        mav.addObject("product", product);
+        mav.addObject("product-edit", product);
         mav.addObject("listcatalog", listCatalog);
         return mav;
     }
-    
+
     @RequestMapping(value = "product-edit")
-    public String editProduct(Product product) {
-        if (productModel.updateProduct(product)) {
-            return "redirect:product-manager.htm";
-        } else {
-            return "redirect:product-manager.htm";
-        }
+    @ResponseBody
+public String editProduct(Product product) {
+        boolean result = productModel.updateProduct(product);
+        JSONObject obj = new JSONObject();
+        obj.put("editsuccess", result);
+        return obj.toJSONString();
     }
 
     @RequestMapping(value = "product_toggle")
-    @ResponseBody public String toggleProduct(String productId) {
+    @ResponseBody
+    public String toggleProduct(String productId) {
         boolean result = productModel.toggleProduct(productId);
         JSONObject obj = new JSONObject();
         obj.put("status", result);
@@ -216,7 +220,8 @@ public class AdminController {
     }
 
     @RequestMapping(value = "product_delete")
-    @ResponseBody public String deleteProduct(String productId) {
+    @ResponseBody
+    public String deleteProduct(String productId) {
         boolean result = productModel.deleteProduct(productId);
         JSONObject obj = new JSONObject();
         obj.put("delete_result", result);

@@ -45,7 +45,7 @@
                                             <button id='product-toggle-${product.productId}' onclick="onClickToggleProduct('${product.productId}')" class="btn btn-action">
                                                 <i class="fas fa-check"></i>
                                             </button>
-                                            <button onclick="location.href = 'product-goedit.htm?productId=${product.productId}'" class="btn btn-action btn-info">
+                                            <button onclick="onClickEditProduct('${product.productId}')" class="btn btn-action btn-info">
                                                 <i class="fas fa-pen"></i>
                                             </button>
                                             <button onclick="onClickDeleteProduct('${product.productId}')" class="btn btn-action btn-danger">

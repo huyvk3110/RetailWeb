@@ -10,14 +10,14 @@
 <!DOCTYPE html>
 <link rel="stylesheet" href="../jsp/backend/css/custom/button-custom.css">	
 <jsp:include page="../content_header.jsp"></jsp:include>
-<section class="content">
-    <!-- Basic Forms -->
-    <div class="box">
-        <!-- /.box-header -->
-        <div class="box-body">
-            <div class="row">
-                <div class="col">
-                    <f:form action="product-insert.htm" commandName="product">
+    <section class="content">
+        <!-- Basic Forms -->
+        <div class="box">
+            <!-- /.box-header -->
+            <div class="box-body">
+                <div class="row">
+                    <div class="col">
+                    <f:form action="product-insert.htm" commandName="product-insert">
                         <div class="form-group">
                             <h5>ID sản phẩm<span class="text-danger">*</span></h5>
                             <div class="controls">
@@ -124,5 +124,27 @@
         <!-- /.box-body -->
     </div>
     <!-- /.box -->
-
+    <script>
+        $('#product-insert').submit(function (e) {
+            e.preventDefault();
+            $.ajax({
+                url: 'product-insert.htm',
+                type: 'POST',
+                data: $(this).serialize(),
+                dataType: 'json',
+                success: function (result) {
+                    var check = result.insertsuccess;
+                    if (check) {
+                        goProductManager();
+                    } else {
+                        goError(e);
+                    }
+                },
+                error: function (result) {
+                    console.log('Error');
+                    goError(e);
+                }
+            })
+        })
+    </script>
 </section>

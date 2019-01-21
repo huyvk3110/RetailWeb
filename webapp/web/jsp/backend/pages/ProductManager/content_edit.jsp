@@ -16,7 +16,7 @@
         <div class="box-body">
             <div class="row">
                 <div class="col">
-                    <f:form action="product-edit.htm" commandName="product">
+                    <f:form action="product-edit.htm" commandName="product-edit">
                         <div class="form-group">
                             <h5>ID sản phẩm<span class="text-danger">*</span></h5>
                             <div class="controls">
@@ -99,5 +99,27 @@
         <!-- /.box-body -->
     </div>
     <!-- /.box -->
-
+    <script>
+        $('#product-edit').submit(function (e) {
+            e.preventDefault();
+            $.ajax({
+                url: 'product-edit.htm',
+                type: 'POST',
+                data: $(this).serialize(),
+                dataType: 'json',
+                success: function (result) {
+                    var check = result.editsuccess;
+                    if (check) {
+                        goProductManager();
+                    } else {
+                        goError(e);
+                    }
+                },
+                error: function (result) {
+                    console.log('Error');
+                    goError(e);
+                }
+            })
+        })
+    </script>
 </section>
