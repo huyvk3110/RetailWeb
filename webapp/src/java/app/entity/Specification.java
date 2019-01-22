@@ -10,26 +10,46 @@ package app.entity;
  * @author huy
  */
 public class Specification {
-    private String specificationId;
+
+    private int specificationId;
     private String specificationKey;
     private String specification;
-    private String status;
+    private boolean status;
+    private String productId;
 
     public Specification() {
     }
 
-    public Specification(String specificationId, String specificationKey, String specification, String status) {
+    public Specification(String specificationKey) {
+        this.specificationKey = specificationKey;
+    }
+
+    public Specification(String specificationKey, String specification) {
+        this.specificationKey = specificationKey;
+        this.specification = specification;
+    }
+
+    public Specification(int specificationId, String specificationKey, String specification, boolean status, String productId) {
         this.specificationId = specificationId;
         this.specificationKey = specificationKey;
         this.specification = specification;
         this.status = status;
+        this.productId = productId;
     }
 
-    public String getSpecificationId() {
+    public String getProductId() {
+        return productId;
+    }
+
+    public void setProductId(String productId) {
+        this.productId = productId;
+    }
+
+    public int getSpecificationId() {
         return specificationId;
     }
 
-    public void setSpecificationId(String specificationId) {
+    public void setSpecificationId(int specificationId) {
         this.specificationId = specificationId;
     }
 
@@ -49,13 +69,11 @@ public class Specification {
         this.specification = specification;
     }
 
-    public String getStatus() {
+    public boolean isStatus() {
         return status;
     }
 
-    public void setStatus(String status) {
+    public void setStatus(boolean status) {
         this.status = status;
     }
-    
-    
 }

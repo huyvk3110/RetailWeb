@@ -6,6 +6,7 @@
 package app.model;
 
 import app.entity.Product;
+import app.entity.Specification;
 import app.util.ConnectionDB;
 import java.sql.CallableStatement;
 import java.sql.Connection;
@@ -64,9 +65,11 @@ public class ProductModel {
                 product.setStatus(rs.getBoolean("Status"));
                 product.setCatalogId(rs.getString("CatalogId"));
                 product.setCatalogName(catalogModel.getCatalogById(rs.getString("CatalogId")).getCatalogName());
+                product.setSpecification(selectSpecificationByProductId(product.getProductId(), isAdmin));
                 list.add(product);
             }
         } catch (SQLException e) {
+            e.printStackTrace();
         } finally {
             ConnectionDB.closeConnection(con, callST);
         }
@@ -103,6 +106,7 @@ public class ProductModel {
                 product.setStatus(rs.getBoolean("Status"));
                 product.setCatalogId(rs.getString("CatalogId"));
                 product.setCatalogName(catalogModel.getCatalogById(rs.getString("CatalogId")).getCatalogName());
+                product.setSpecification(selectSpecificationByProductId(product.getProductId(), isAdmin));
                 list.add(product);
             }
         } catch (SQLException e) {
@@ -152,6 +156,7 @@ public class ProductModel {
                 product.setStatus(rs.getBoolean("Status"));
                 product.setCatalogId(rs.getString("CatalogId"));
                 product.setCatalogName(catalogModel.getCatalogById(rs.getString("CatalogId")).getCatalogName());
+                product.setSpecification(selectSpecificationByProductId(product.getProductId(), false));
                 list.add(product);
             }
         } catch (SQLException e) {
@@ -189,6 +194,7 @@ public class ProductModel {
                 product.setStatus(rs.getBoolean("Status"));
                 product.setCatalogId(rs.getString("CatalogId"));
                 product.setCatalogName(catalogModel.getCatalogById(rs.getString("CatalogId")).getCatalogName());
+                product.setSpecification(selectSpecificationByProductId(product.getProductId(), false));
                 list.add(product);
             }
         } catch (SQLException e) {
@@ -226,6 +232,7 @@ public class ProductModel {
                 product.setStatus(rs.getBoolean("Status"));
                 product.setCatalogId(rs.getString("CatalogId"));
                 product.setCatalogName(catalogModel.getCatalogById(rs.getString("CatalogId")).getCatalogName());
+                product.setSpecification(selectSpecificationByProductId(product.getProductId(), false));
                 list.add(product);
             }
         } catch (SQLException e) {
@@ -263,6 +270,7 @@ public class ProductModel {
                 product.setStatus(rs.getBoolean("Status"));
                 product.setCatalogId(rs.getString("CatalogId"));
                 product.setCatalogName(catalogModel.getCatalogById(rs.getString("CatalogId")).getCatalogName());
+                product.setSpecification(selectSpecificationByProductId(product.getProductId(), false));
                 list.add(product);
             }
         } catch (SQLException e) {
@@ -298,6 +306,7 @@ public class ProductModel {
                 product.setStatus(rs.getBoolean("Status"));
                 product.setCatalogId(rs.getString("CatalogId"));
                 product.setCatalogName(catalogModel.getCatalogById(rs.getString("CatalogId")).getCatalogName());
+                product.setSpecification(selectSpecificationByProductId(product.getProductId(), false));
             }
         } catch (SQLException e) {
         } finally {
@@ -334,6 +343,7 @@ public class ProductModel {
                 product.setStatus(rs.getBoolean("Status"));
                 product.setCatalogId(rs.getString("CatalogId"));
                 product.setCatalogName(catalogModel.getCatalogById(rs.getString("CatalogId")).getCatalogName());
+                product.setSpecification(selectSpecificationByProductId(product.getProductId(), false));
                 list.add(product);
             }
         } catch (SQLException e) {
@@ -371,6 +381,7 @@ public class ProductModel {
                 product.setStatus(rs.getBoolean("Status"));
                 product.setCatalogId(rs.getString("CatalogId"));
                 product.setCatalogName(catalogModel.getCatalogById(rs.getString("CatalogId")).getCatalogName());
+                product.setSpecification(selectSpecificationByProductId(product.getProductId(), false));
                 list.add(product);
             }
         } catch (SQLException e) {
@@ -443,6 +454,7 @@ public class ProductModel {
                 product.setStatus(rs.getBoolean("Status"));
                 product.setCatalogId(rs.getString("CatalogId"));
                 product.setCatalogName(catalogModel.getCatalogById(rs.getString("CatalogId")).getCatalogName());
+                product.setSpecification(selectSpecificationByProductId(product.getProductId(), false));
             }
         } catch (SQLException e) {
         } finally {
@@ -474,6 +486,9 @@ public class ProductModel {
             callST.registerOutParameter(13, Types.BOOLEAN);
             callST.execute();
             check = callST.getBoolean(13);
+            if(check) {
+                handleProductSpecification(product);
+            }
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
@@ -504,6 +519,9 @@ public class ProductModel {
             callST.registerOutParameter(13, Types.BOOLEAN);
             callST.execute();
             check = callST.getBoolean(13);
+            if(check) {
+                handleProductSpecification(product);
+            }
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
@@ -516,6 +534,8 @@ public class ProductModel {
         Connection con = null;
         CallableStatement callST = null;
         boolean result = false;
+        
+        deleteSpecificationByProductId(productId);
         try {
             con = ConnectionDB.openConnection();
             callST = con.prepareCall("{call deleteProduct(?,?)}");
@@ -548,5 +568,154 @@ public class ProductModel {
             ConnectionDB.closeConnection(con, callST);
         }
         return result;
+    }
+    
+    //****************************Specification****************************//
+    public boolean insertSpecification(Specification specification) {
+        Connection con = null;
+        CallableStatement callST = null;
+        boolean check = false;
+        try {
+            con = ConnectionDB.openConnection();
+            callST = con.prepareCall("{call insertSpecification(?,?,?,?,?)}");
+            callST.setString(1, specification.getSpecificationKey());
+            callST.setString(2, specification.getSpecification());
+            callST.setBoolean(3, true);
+            callST.setString(4, specification.getProductId());
+            callST.registerOutParameter(5, Types.BOOLEAN);
+            callST.execute();
+            check = callST.getBoolean(5);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            ConnectionDB.closeConnection(con, callST);
+        }
+        return check;
+    }
+    
+    public boolean updateSpecification(Specification specification) {
+        Connection con = null;
+        CallableStatement callST = null;
+        boolean check = false;
+        try {
+            con = ConnectionDB.openConnection();
+            callST = con.prepareCall("{call updateSpecification(?,?,?,?,?)}");
+            callST.setString(1, specification.getSpecificationKey());
+            callST.setString(2, specification.getSpecification());
+            callST.setBoolean(3, specification.isStatus());
+            callST.setString(4, specification.getProductId());
+            callST.registerOutParameter(5, Types.BOOLEAN);
+            callST.execute();
+            check = callST.getBoolean(5);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            ConnectionDB.closeConnection(con, callST);
+        }
+        return check;
+    }
+    
+    public void deleteSpecificationByProductId(String productId) {
+        Connection con = null;
+        CallableStatement callST = null;
+        try {
+            con = ConnectionDB.openConnection();
+            callST = con.prepareCall("{call deleteSpecificationByProductId(?)}");
+            callST.setString(1, productId);
+            callST.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            ConnectionDB.closeConnection(con, callST);
+        }
+    }
+    
+    public Specification selectSpecificationByKey(String key,boolean isAdmin) {
+        Connection con = null;
+        CallableStatement callST = null;
+        Specification spec = new Specification();
+        try {
+            con = ConnectionDB.openConnection();
+            callST = con.prepareCall("{call selectSpecificationByKey(?,?)}");
+            callST.setString(1, key);
+            callST.setBoolean(2, isAdmin);
+            ResultSet rs = callST.executeQuery();
+            if(rs.next()) {
+                spec.setSpecificationId(rs.getInt("SpecificationId"));
+                spec.setSpecificationKey(rs.getString("SpecificationKey"));
+                spec.setSpecification(rs.getString("Specification"));
+                spec.setStatus(rs.getBoolean("Status"));
+                spec.setProductId(rs.getString("ProductId"));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            ConnectionDB.closeConnection(con, callST);
+        }
+        return spec;
+    }
+    
+    public List<Specification> selectSpecificationByProductId(String productId,boolean isAdmin) {
+        Connection con = null;
+        CallableStatement callST = null;
+        List<Specification> listSpec = new ArrayList<>();
+        try {
+            con = ConnectionDB.openConnection();
+            callST = con.prepareCall("{call selectSpecificationByProductId(?,?)}");
+            callST.setString(1, productId);
+            callST.setBoolean(2, isAdmin);
+            ResultSet rs = callST.executeQuery();
+            while(rs.next()) {
+                Specification spec = new Specification();
+                spec.setSpecificationId(rs.getInt("SpecificationId"));
+                spec.setSpecificationKey(rs.getString("SpecificationKey"));
+                spec.setSpecification(rs.getString("Specification"));
+                spec.setStatus(rs.getBoolean("Status"));
+                spec.setProductId(rs.getString("ProductId"));
+                listSpec.add(spec);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            ConnectionDB.closeConnection(con, callST);
+        }
+        return listSpec;
+    }
+    
+    public boolean checkSpecificationExist(String specKey, String productId) {
+        Connection con = null;
+        CallableStatement callST = null;
+        boolean check = false;
+        try {
+            con = ConnectionDB.openConnection();
+            callST = con.prepareCall("{call checkSpecificationExist(?,?,?)}");
+            callST.setString(1, specKey);
+            callST.setString(2, productId);
+            callST.registerOutParameter(3, Types.BOOLEAN);
+            callST.execute();
+            check = callST.getBoolean(3);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            ConnectionDB.closeConnection(con, callST);
+        }
+        return check;
+    }
+    
+    public void handleSpecification(Specification specification) {
+        if(checkSpecificationExist(specification.getSpecificationKey(), specification.getProductId())) {
+            updateSpecification(specification);
+        }else {
+            insertSpecification(specification);
+        }
+    }
+    
+    public void handleProductSpecification(Product product) {
+        product.bindAllSpecification();
+        product.activeAllSpecification();
+        List<Specification> specification = product.getSpecification();
+        for (Specification spec : specification) {
+            handleSpecification(spec);
+        }
     }
 }

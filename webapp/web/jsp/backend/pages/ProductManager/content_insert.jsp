@@ -90,26 +90,23 @@
                         <div class="form-group">
                             <h5>Thông số sản phẩm</h5>
                             <div class="controls">
-                                <select id="productType" name="select" class="form-control">
-                                    <option value="spec_phone" label="Điện thoại"/>
-                                    <option value="spec_acces" label="Phụ kiện"/>
-                                    <option value="spec_other" label="Khác"/>
-                                </select>
+                                <table border="0" class="table table-bordered table-striped">
+                                    <tbody>
+                                        <c:forEach var = "i" begin = "0" end = "11">
+                                            <tr>
+                                                <td><f:input path="specification[${i}].specificationKey" class="form-control"  readonly="true"/></td>
+                                                <td><f:input path="specification[${i}].specification" class="form-control" /></td>
+                                            </tr>
+                                        </c:forEach>
+                                    </tbody>
+                                </table>
                             </div>
+                        </div>
+                        <div class="form-group">
+                            <h5>Hình ảnh sản phẩm</h5>
                             <div class="controls">
-                                <c:forEach items="${product.specification}" var="spec">
-                                    <f:option value="${spec.specificationKey}" label="${spec.specification}"/>
-                                </c:forEach>
+                                
                             </div>
-                            <!--Listen event for add-->
-                            <script>
-                                var select = document.getElementById("productType");
-                                console.log("Select is: ", select.value);
-                                select.addEventListener("change", function (e) {
-                                    console.log("Select is: ", select.value);
-                                    console.log("Specification is: ", product.specification);
-                                });
-                            </script>
                         </div>
                         <div class="text-xs-right">
                             <input type="submit" value="Insert" class="btn btn-info">

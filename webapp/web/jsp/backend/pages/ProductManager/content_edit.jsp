@@ -86,6 +86,21 @@
                                 </f:select>
                             </div>
                         </div>
+                        <div class="form-group">
+                            <h5>Thông số sản phẩm</h5>
+                            <div class="controls">
+                                <table border="0" class="table table-bordered table-striped">
+                                    <tbody>
+                                        <c:forEach var = "i" begin = "0" end = "11">
+                                            <tr>
+                                                <td><f:input path="specification[${i}].specificationKey" class="form-control"  readonly="true"/></td>
+                                                <td><f:input path="specification[${i}].specification" class="form-control" /></td>
+                                            </tr>
+                                        </c:forEach>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
                         <div class="text-xs-right">
                             <input type="submit" value="Edit" class="btn btn-info">
                         </div>

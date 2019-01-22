@@ -191,5 +191,15 @@ public class Product {
         this.status = status;
     }
 
+    public void bindAllSpecification() {
+        for (Specification spec : this.specification) {
+            spec.setProductId(this.productId);
+        }
+    }
     
+    public void activeAllSpecification() {
+        for (Specification spec : this.specification) {
+            spec.setStatus(true);
+        }
+    }
 }

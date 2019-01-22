@@ -8,8 +8,10 @@ package app.controller;
 import app.define.TextDefine;
 import app.entity.Catalog;
 import app.entity.Product;
+import app.entity.Specification;
 import app.model.CatalogModel;
 import app.model.ProductModel;
+import java.util.ArrayList;
 import java.util.List;
 import org.json.simple.JSONObject;
 import org.springframework.stereotype.Controller;
@@ -38,12 +40,13 @@ public class AdminController {
         ModelAndView mav = new ModelAndView("backend/pages/index");
         return mav;
     }
-    
+
     @RequestMapping(value = "error")
     public ModelAndView goError() {
         ModelAndView mav = new ModelAndView("backend/pages/error");
         return mav;
     }
+
     //**********************************Catalog**********************************//
     @RequestMapping(value = "catalog-manager")
     @ResponseBody
@@ -57,7 +60,8 @@ public class AdminController {
     }
 
     @RequestMapping(value = "catalog-goinsert")
-    @ResponseBody public ModelAndView goCatalogInsert() {
+    @ResponseBody
+    public ModelAndView goCatalogInsert() {
         ModelAndView mav = new ModelAndView("backend/pages/CatalogManager/content_insert");
         //Catalog new
         Catalog catalog = new Catalog();
@@ -82,7 +86,8 @@ public class AdminController {
     }
 
     @RequestMapping(value = "catalog-insert")
-    @ResponseBody public String insertCatalog(Catalog catalog) {
+    @ResponseBody
+    public String insertCatalog(Catalog catalog) {
         boolean result = catalogModel.insertCatalog(catalog);
         JSONObject obj = new JSONObject();
         obj.put("insertsuccess", result);
@@ -90,7 +95,8 @@ public class AdminController {
     }
 
     @RequestMapping(value = "catalog-goedit")
-    @ResponseBody public ModelAndView goCatalogEdit(String catalogId) {
+    @ResponseBody
+    public ModelAndView goCatalogEdit(String catalogId) {
         ModelAndView mav = new ModelAndView("backend/pages/CatalogManager/content_edit");
         //Catalog new
         Catalog catalog = catalogModel.getCatalogById(catalogId, true);
@@ -112,7 +118,8 @@ public class AdminController {
     }
 
     @RequestMapping(value = "catalog-edit")
-    @ResponseBody public String editCatalog(Catalog catalog) {
+    @ResponseBody
+    public String editCatalog(Catalog catalog) {
         boolean result = catalogModel.updateCatalog(catalog);
         JSONObject obj = new JSONObject();
         obj.put("editsuccess", result);
@@ -154,6 +161,21 @@ public class AdminController {
         ModelAndView mav = new ModelAndView("backend/pages/ProductManager/content_insert");
         //Product new
         Product product = new Product();
+        //Specification
+        List<Specification> listpecification = new ArrayList<>();
+        listpecification.add(new Specification("Hãng sản xuất"));
+        listpecification.add(new Specification("3G"));
+        listpecification.add(new Specification("4G"));
+        listpecification.add(new Specification("Kích thước"));
+        listpecification.add(new Specification("Trọng lượng"));
+        listpecification.add(new Specification("Loại SIM"));
+        listpecification.add(new Specification("Loại màn hình"));
+        listpecification.add(new Specification("Kích thước màn hình"));
+        listpecification.add(new Specification("Độ phân giải màn hình"));
+        listpecification.add(new Specification("Hệ điều hành"));
+        listpecification.add(new Specification("Màu sắc"));
+        listpecification.add(new Specification("Bộ nhớ "));
+        product.setSpecification(listpecification);
         //Product parent select
         List<Product> listProduct = productModel.getAllProduct(true);
         //Product id generate
@@ -170,6 +192,7 @@ public class AdminController {
         //Add property
         mav.addObject("category", TextDefine.txt_danhmuc);
         mav.addObject("subcategory", TextDefine.txt_themlydanhmuc);
+        mav.addObject("product-insert", product);
         mav.addObject("product-insert", product);
         mav.addObject("listcatalog", listCatalog);
         mav.addObject("productId", productId);
@@ -203,7 +226,7 @@ public class AdminController {
 
     @RequestMapping(value = "product-edit")
     @ResponseBody
-public String editProduct(Product product) {
+    public String editProduct(Product product) {
         boolean result = productModel.updateProduct(product);
         JSONObject obj = new JSONObject();
         obj.put("editsuccess", result);
