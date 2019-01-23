@@ -37,14 +37,23 @@
                     </span>
                 </a>
                 <ul class="treeview-menu">
-                    <li><a id="sidebar-product-manager"  href="product-manager.htm">Quản lý sản phẩm</a></li>
-                    <li><a id="sidebar-product-insert"  href="product-goinsert.htm">Thêm sản phẩm</a></li>
+                    <li><a id="sidebar-product-manager"  href="#">Quản lý sản phẩm</a></li>
+                    <li><a id="sidebar-product-insert"  href="#">Thêm sản phẩm</a></li>
                 </ul>
             </li>
-            <li>
-                <a href="index.html">
+            <li class="treeview">
+                <a href="#">
                     <span>Người dùng</span>
+                    <span class="pull-right-container">
+                        <i class="fa fa-angle-right pull-right"></i>
+                    </span>
                 </a>
+                <ul class="treeview-menu">
+                    <li><a id="sidebar-moderator-manager"  href="#">Quản trị viên</a></li>
+                    <li><a id="sidebar-account-manager"  href="#">Quản lý người dùng</a></li>
+                    <li><a id="sidebar-account-insert"  href="#">Thêm người dùng</a></li>
+                </ul>
+                
             </li>
             <li>
                 <a href="index.html">

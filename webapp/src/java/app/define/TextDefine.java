@@ -15,4 +15,6 @@ public class TextDefine {
     public static final String txt_themlydanhmuc  = "Thêm danh mục";
     public static final String txt_quanlysanpham  = "Quản lý sản phẩm";
     public static final String txt_themsanpham  = "Thêm sản phẩm";
+    public static final String txt_nguoidung = "Người dùng";
+    public static final String txt_quantrivien  = "Quản trị viên";
 }

@@ -6,17 +6,24 @@
 package app.controller;
 
 import app.define.TextDefine;
+import app.entity.Account;
 import app.entity.Catalog;
 import app.entity.Product;
 import app.entity.Specification;
+import app.model.AccountModel;
 import app.model.CatalogModel;
 import app.model.ProductModel;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import javax.servlet.http.HttpServletRequest;
 import org.json.simple.JSONObject;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.commons.CommonsMultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 /**
@@ -29,10 +36,12 @@ public class AdminController {
 
     CatalogModel catalogModel = null;
     ProductModel productModel = null;
+    AccountModel accountModel = null;
 
     public AdminController() {
         catalogModel = new CatalogModel();
         productModel = new ProductModel();
+        accountModel = new AccountModel();
     }
 
     @RequestMapping(value = "index")
@@ -249,5 +258,16 @@ public class AdminController {
         JSONObject obj = new JSONObject();
         obj.put("delete_result", result);
         return obj.toJSONString();
+    }
+    
+    //**********************************Account**********************************//
+    @RequestMapping(value = "moderator-manager")
+    public ModelAndView moderatorManager() {
+        ModelAndView mav = new ModelAndView("backend/pages/Account/moderator");
+        List<Account> listAccount = accountModel.selectModeratorAccount();
+        mav.addObject("category", TextDefine.txt_nguoidung);
+        mav.addObject("subcategory", TextDefine.txt_quantrivien);
+        mav.addObject("listAccount", listAccount);
+        return mav;
     }
 }

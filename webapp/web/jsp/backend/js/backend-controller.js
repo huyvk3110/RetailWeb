@@ -14,6 +14,12 @@ function goPage(url) {
     })
 }
 
+function goModeratorManager() {
+    console.log('Hahahahaha');
+    var url = 'moderator-manager.htm';
+    goPage(url);
+}
+
 function goCatalogManager() {
     var url = 'catalog-manager.htm';
     goPage(url);
@@ -59,6 +65,12 @@ $(document).ready(function () {
     $('#sidebar-product-insert').click(function (e) {
         e.preventDefault();
         goProductInsert();
+    })
+    //Moderator manager
+    $('#sidebar-moderator-manager').click(function (e) {
+        console.log('Hahahahaha');
+        e.preventDefault();
+        goModeratorManagers();
     })
 });
 
