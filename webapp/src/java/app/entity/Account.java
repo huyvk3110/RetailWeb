@@ -6,6 +6,7 @@
 package app.entity;
 
 import java.sql.Date;
+import java.time.LocalDate;
 
 /**
  *
@@ -21,17 +22,17 @@ public class Account {
     Date birthDay;
     String mail;
     String phone;
-    String adress;
+    String address;
     Date created;
     int point;
-    boolean status;
+    boolean status = true;
     String avatar;
     boolean isOnline;
 
     public Account() {
     }
 
-    public Account(String accountId, String userName, String passWord, int type, String fullName, Date birthDay, String mail, String phone, String adress, Date created, int point, boolean status, String avatar, boolean isOnline) {
+    public Account(String accountId, String userName, String passWord, int type, String fullName, Date birthDay, String mail, String phone, String address, Date created, int point, boolean status, String avatar, boolean isOnline) {
         this.accountId = accountId;
         this.userName = userName;
         this.passWord = passWord;
@@ -40,7 +41,7 @@ public class Account {
         this.birthDay = birthDay;
         this.mail = mail;
         this.phone = phone;
-        this.adress = adress;
+        this.address = address;
         this.created = created;
         this.point = point;
         this.status = status;
@@ -120,12 +121,12 @@ public class Account {
         this.phone = phone;
     }
 
-    public String getAdress() {
-        return adress;
+    public String getAddress() {
+        return address;
     }
 
-    public void setAdress(String adress) {
-        this.adress = adress;
+    public void setAddress(String address) {
+        this.address = address;
     }
 
     public Date getCreated() {

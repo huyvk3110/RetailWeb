@@ -36,7 +36,7 @@ public class AccountModel {
             callST.setDate(7, account.getBirthDay());
             callST.setString(8, account.getMail());
             callST.setString(9, account.getPhone());
-            callST.setString(10, account.getAdress());
+            callST.setString(10, account.getAddress());
             callST.setBoolean(11, account.isStatus());
             callST.registerOutParameter(12, Types.BOOLEAN);
             callST.execute();
@@ -47,6 +47,57 @@ public class AccountModel {
             ConnectionDB.closeConnection(con, callST);
         }
         return check;
+    }
+    
+    public boolean updateAccount(Account account) {
+        Connection con = null;
+        CallableStatement callST = null;
+        boolean check = false;
+        try {
+            con = ConnectionDB.openConnection();
+            callST = con.prepareCall("{call updateAccount(?,?,?,?,?,?,?,?,?,?,?,?)}");
+            callST.setString(1, account.getAccountId());
+            callST.setString(2, account.getUserName());
+            callST.setString(3, account.getPassWord());
+            callST.setInt(4, account.getType());
+            callST.setString(5, account.getAvatar());
+            callST.setString(6, account.getFullName());
+            callST.setDate(7, account.getBirthDay());
+            callST.setString(8, account.getMail());
+            callST.setString(9, account.getPhone());
+            callST.setString(10, account.getAddress());
+            callST.setBoolean(11, account.isStatus());
+            callST.registerOutParameter(12, Types.BOOLEAN);
+            callST.execute();
+            check = callST.getBoolean(12);
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            ConnectionDB.closeConnection(con, callST);
+        }
+        return check;
+    }
+    
+    public List<Account> selectAllAccount() {
+        Connection con = null;
+        CallableStatement callST = null;
+        List<Account> list = new ArrayList<>();
+        try {
+            con = ConnectionDB.openConnection();
+            callST = con.prepareCall("{call selectAllAccount()}");
+            ResultSet rs = callST.executeQuery();
+            while(rs.next()) {
+                Account account = new Account();
+                account.setAccountId(rs.getString("AccountId"));
+                account.setUserName(rs.getString("UserName"));
+                list.add(account);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            ConnectionDB.closeConnection(con, callST);
+        }
+        return list;
     }
     
     public Account selectAccountById(String accountId ,boolean isAdmin) {
@@ -63,13 +114,14 @@ public class AccountModel {
                 account = new Account();
                 account.setAccountId(rs.getString("AccountId"));
                 account.setUserName(rs.getString("UserName"));
+                account.setPassWord(rs.getString("PassWord"));
                 account.setType(rs.getInt("Type"));
                 account.setAvatar(rs.getString("Avatar"));
                 account.setFullName(rs.getString("FullName"));
                 account.setBirthDay(rs.getDate("BirthDay"));
                 account.setMail(rs.getString("Mail"));
                 account.setPhone(rs.getString("Phone"));
-                account.setAdress(rs.getString("Adress"));
+                account.setAddress(rs.getString("Adress"));
                 account.setIsOnline(rs.getBoolean("IsOnline"));
                 account.setStatus(rs.getBoolean("Status"));
             }
@@ -95,13 +147,14 @@ public class AccountModel {
                 account = new Account();
                 account.setAccountId(rs.getString("AccountId"));
                 account.setUserName(rs.getString("UserName"));
+                account.setPassWord(rs.getString("PassWord"));
                 account.setType(rs.getInt("Type"));
                 account.setAvatar(rs.getString("Avatar"));
                 account.setFullName(rs.getString("FullName"));
                 account.setBirthDay(rs.getDate("BirthDay"));
                 account.setMail(rs.getString("Mail"));
                 account.setPhone(rs.getString("Phone"));
-                account.setAdress(rs.getString("Adress"));
+                account.setAddress(rs.getString("Adress"));
                 account.setIsOnline(rs.getBoolean("IsOnline"));
                 account.setStatus(rs.getBoolean("Status"));
             }
@@ -119,20 +172,21 @@ public class AccountModel {
         List<Account> listAccount = new ArrayList<>();
         try {
             con = ConnectionDB.openConnection();
-            callST = con.prepareCall("{call selectUserAccount(?,?)}");
+            callST = con.prepareCall("{call selectUserAccount(?)}");
             callST.setBoolean(1, isAdmin);
             ResultSet rs = callST.executeQuery();
-            if(rs.next()) {
+            while(rs.next()) {
                 Account account = new Account();
                 account.setAccountId(rs.getString("AccountId"));
                 account.setUserName(rs.getString("UserName"));
+                account.setPassWord(rs.getString("PassWord"));
                 account.setType(rs.getInt("Type"));
                 account.setAvatar(rs.getString("Avatar"));
                 account.setFullName(rs.getString("FullName"));
                 account.setBirthDay(rs.getDate("BirthDay"));
                 account.setMail(rs.getString("Mail"));
                 account.setPhone(rs.getString("Phone"));
-                account.setAdress(rs.getString("Adress"));
+                account.setAddress(rs.getString("Adress"));
                 account.setIsOnline(rs.getBoolean("IsOnline"));
                 account.setStatus(rs.getBoolean("Status"));
                 listAccount.add(account);
@@ -153,7 +207,7 @@ public class AccountModel {
             con = ConnectionDB.openConnection();
             callST = con.prepareCall("{call selectModeratorAccount()}");
             ResultSet rs = callST.executeQuery();
-            if(rs.next()) {
+            while(rs.next()) {
                 Account account = new Account();
                 account.setAccountId(rs.getString("AccountId"));
                 account.setUserName(rs.getString("UserName"));
@@ -163,7 +217,7 @@ public class AccountModel {
                 account.setBirthDay(rs.getDate("BirthDay"));
                 account.setMail(rs.getString("Mail"));
                 account.setPhone(rs.getString("Phone"));
-                account.setAdress(rs.getString("Adress"));
+                account.setAddress(rs.getString("Adress"));
                 account.setIsOnline(rs.getBoolean("IsOnline"));
                 account.setStatus(rs.getBoolean("Status"));
                 listAccount.add(account);
@@ -174,6 +228,44 @@ public class AccountModel {
             ConnectionDB.closeConnection(con, callST);
         }
         return listAccount;
+    }
+    
+    public boolean deleteAccount(String accountId) {
+        Connection con = null;
+        CallableStatement callST = null;
+        boolean check = false;
+        try {
+            con = ConnectionDB.openConnection();
+            callST = con.prepareCall("{call deleteAccount(?,?)}");
+            callST.setString(1, accountId);
+            callST.registerOutParameter(2, Types.BOOLEAN);
+            callST.execute();
+            check = callST.getBoolean(2);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            ConnectionDB.closeConnection(con, callST);
+        }
+        return check;
+    }
+    
+    public boolean toggleAccount(String accountId) {
+        Connection con = null;
+        CallableStatement callST = null;
+        boolean check = false;
+        try {
+            con = ConnectionDB.openConnection();
+            callST = con.prepareCall("{call toggleAccount(?,?)}");
+            callST.setString(1, accountId);
+            callST.registerOutParameter(2, Types.BOOLEAN);
+            callST.executeUpdate();
+            check = callST.getBoolean(2);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            ConnectionDB.closeConnection(con, callST);
+        }
+        return check;
     }
     
     public boolean loginModerator(String userName, String passWord) {
@@ -194,5 +286,20 @@ public class AccountModel {
             ConnectionDB.closeConnection(con, callST);
         }
         return check;
+    }
+    
+    public void logoutModerator(String accountId) {
+        Connection con = null;
+        CallableStatement callST = null;
+        try {
+            con = ConnectionDB.openConnection();
+            callST = con.prepareCall("{call logoutModerator(?)}");
+            callST.setString(1, accountId);
+            callST.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            ConnectionDB.closeConnection(con, callST);
+        }
     }
 }

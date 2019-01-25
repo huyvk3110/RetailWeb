@@ -10,13 +10,23 @@ function goPage(url) {
         },
         error: function (response) {
             console.log('Sidebar error', url);
+            console.log('Sidebar data error', response);
         }
     })
 }
 
 function goModeratorManager() {
-    console.log('Hahahahaha');
     var url = 'moderator-manager.htm';
+    goPage(url);
+}
+
+function goUserManager() {
+    var url = 'user-manager.htm';
+    goPage(url);
+}
+
+function goAccountInsert() {
+    var url = 'account-goinsert.htm';
     goPage(url);
 }
 
@@ -68,9 +78,18 @@ $(document).ready(function () {
     })
     //Moderator manager
     $('#sidebar-moderator-manager').click(function (e) {
-        console.log('Hahahahaha');
         e.preventDefault();
-        goModeratorManagers();
+        goModeratorManager();
+    })
+    //User manager
+    $('#sidebar-user-manager').click(function (e) {
+        e.preventDefault();
+        goUserManager();
+    })
+    //Accout add
+    $('#sidebar-account-insert').click(function (e) {
+        e.preventDefault();
+        goAccountInsert();
     })
 });
 
@@ -175,5 +194,57 @@ function onClickToggleCatalog(catalogId) {
 
 function onClickEditCatalog(catalogId) {
     var url = 'catalog-goedit.htm?catalogId=' + catalogId;
+    goPage(url);
+}
+
+//***************Account***************//
+function initDataStatusAccount(moderatorId, status) {
+    if (typeof status !== 'boolean')
+        return;
+    console.log('init data status moderator');
+    document.getElementById('account-status-' + moderatorId).innerHTML = (status == true) ? "Kích hoạt" : "Không kích hoạt";
+    document.getElementById('account-status-' + moderatorId).className = (status == true) ? "" : "text-danger";
+    document.getElementById('account-toggle-' + moderatorId).className = "btn btn-action " + ((status == true) ? "btn-secondary" : "btn-success");
+}
+
+function onClickToggleAccount(accountId) {
+    $.ajax({
+        url: 'account-toggle.htm?accountId=' + accountId,
+        type: 'GET',
+        dataType: 'json',
+        success: function (data) {
+            console.log('Toggle moderator success',data);
+            var status = data.status;
+            if(typeof status === 'boolean') {
+                initDataStatusAccount(accountId,status);
+            }
+        },
+        error: function (data) {
+            console.log('Toggle moderator error',data);
+        }
+    });
+}
+
+function onClickDeleteAccount(accountId) {
+    $.ajax({
+        url: 'account_delete.htm?accountId=' + accountId,
+        type: 'GET',
+        dataType: 'json',
+        success: function (data) {
+            console.log('Toggle moderator success',data);
+            var status = data.status;
+            if(typeof status === 'boolean' && status) {
+                var element = document.getElementById('account-item-' + accountId);
+                element.parentNode.removeChild(element);
+            }
+        },
+        error: function (data) {
+            console.log('Toggle moderator error',data);
+        }
+    });
+}
+
+function onClickEditAccount(accountId) {
+    var url = 'account-goedit.htm?accountId=' + accountId;
     goPage(url);
 }

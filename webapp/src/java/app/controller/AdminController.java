@@ -202,7 +202,6 @@ public class AdminController {
         mav.addObject("category", TextDefine.txt_danhmuc);
         mav.addObject("subcategory", TextDefine.txt_themlydanhmuc);
         mav.addObject("product-insert", product);
-        mav.addObject("product-insert", product);
         mav.addObject("listcatalog", listCatalog);
         mav.addObject("productId", productId);
         return mav;
@@ -267,7 +266,86 @@ public class AdminController {
         List<Account> listAccount = accountModel.selectModeratorAccount();
         mav.addObject("category", TextDefine.txt_nguoidung);
         mav.addObject("subcategory", TextDefine.txt_quantrivien);
-        mav.addObject("listAccount", listAccount);
+        mav.addObject("listModerator", listAccount);
         return mav;
     }
+    
+    @RequestMapping(value = "user-manager")
+    public ModelAndView userManager() {
+        ModelAndView mav = new ModelAndView("backend/pages/Account/user");
+        List<Account> listUser = accountModel.selectUserAccount(true);
+        mav.addObject("category", TextDefine.txt_nguoidung);
+        mav.addObject("subcategory", TextDefine.txt_nguoidung);
+        mav.addObject("listUser", listUser);
+        return mav;
+    }
+    
+    @RequestMapping(value = "account-toggle")
+    @ResponseBody public String moderatorToggle(String accountId) {
+        boolean check = accountModel.toggleAccount(accountId);
+        JSONObject obj = new JSONObject();
+        obj.put("status", check);
+        return obj.toJSONString();
+    }
+    
+    @RequestMapping(value = "account-goinsert")
+    @ResponseBody public ModelAndView accountInsert() {
+        ModelAndView mav = new ModelAndView("backend/pages/Account/insert");
+        //Account new
+        Account account = new Account();
+        //Product id generate
+        List<Account> listAccount = accountModel.selectAllAccount();
+        int max = 0;
+        for (Account acc : listAccount) {
+            int numId = Integer.parseInt(acc.getAccountId().substring(1));
+            if (numId > max) {
+                max = numId;
+            }
+        }
+        String accountId = String.format("A%06d", max + 1);
+        //Add property
+        mav.addObject("category", TextDefine.txt_danhmuc);
+        mav.addObject("subcategory", TextDefine.txt_themtaikhoan);
+        mav.addObject("account-insert", account);
+//        mav.addObject("listcatalog", listCatalog);
+        mav.addObject("accountId", accountId);
+        return mav;
+    }
+    
+    @RequestMapping(value = "account-goedit")
+    @ResponseBody public ModelAndView accountEdit(String accountId) {
+        ModelAndView mav = new ModelAndView("backend/pages/Account/edit");
+        //Account new
+        Account account = accountModel.selectAccountById(accountId, true);
+        //Add property
+        mav.addObject("category", TextDefine.txt_danhmuc);
+        mav.addObject("subcategory", TextDefine.txt_suataikhoan);
+        mav.addObject("account-edit", account);
+        return mav;
+    }
+    
+    @RequestMapping(value = "account_delete")
+    @ResponseBody public String deleteAccount(String accountId) {
+        boolean result = accountModel.deleteAccount(accountId);
+        JSONObject obj = new JSONObject();
+        obj.put("status", result);
+        return obj.toJSONString();
+    }
+    
+    @RequestMapping(value = "account-insert")
+    @ResponseBody public String createAccount(Account account) {
+        boolean result = accountModel.createAccount(account);
+        JSONObject obj = new JSONObject();
+        obj.put("status", result);
+        return obj.toJSONString();
+    }
+    
+    @RequestMapping(value = "account-edit")
+    @ResponseBody public String editAccount(Account account) {
+        boolean result = accountModel.updateAccount(account);
+        JSONObject obj = new JSONObject();
+        obj.put("status", result);
+        return obj.toJSONString();
+    }
+    
 }

@@ -32,32 +32,32 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                <c:forEach items="${listModerator}" var="moderator">
-                                    <tr id='account-item-${moderator.accountId}'>
-                                        <th>${moderator.accountId}</th>
-                                        <th>${moderator.userName}</th>
-                                        <th>${moderator.type==1? "Admin":moderator.type==2? "Editor":moderator.type==3? "Moderator":moderator.type==4? "User":"Vip user"}</th>
-                                        <th>${moderator.fullName}</th>
-                                        <th>${moderator.birthDay}</th>
-                                        <th>${moderator.mail}</th>
-                                        <th>${moderator.phone}</th>
-                                        <th>${moderator.isOnline}</th>
-                                        <th id='account-status-${moderator.accountId}'></th>
+                                <c:forEach items="${listUser}" var="user">
+                                    <tr id='account-item-${user.accountId}'>
+                                        <th>${user.accountId}</th>
+                                        <th>${user.userName}</th>
+                                        <th>${user.type==1? "Admin":user.type==2? "Editor":user.type==3? "Moderator":user.type==4? "User":"Vip user"}</th>
+                                        <th>${user.fullName}</th>
+                                        <th>${user.birthDay}</th>
+                                        <th>${user.mail}</th>
+                                        <th>${user.phone}</th>
+                                        <th>${user.isOnline}</th>
+                                        <th id='account-status-${user.accountId}'></th>
                                         <th class="d-block">
-                                            <button id='account-toggle-${moderator.accountId}' onclick="onClickToggleAccount('${moderator.accountId}')" class="btn btn-action">
+                                            <button id='account-toggle-${user.accountId}' onclick="onClickToggleAccount('${user.accountId}')" class="btn btn-action">
                                                 <i class="fas fa-check"></i>
                                             </button>
-                                            <button onclick="onClickEditAccount('${moderator.accountId}')" class="btn btn-action btn-info">
+                                            <button onclick="onClickEditAccount('${user.accountId}')" class="btn btn-action btn-info">
                                                 <i class="fas fa-pen"></i>
                                             </button>
-                                            <button onclick="onClickDeleteAccount('${moderator.accountId}')" class="btn btn-action btn-danger">
+                                            <button onclick="onClickDeleteAccount('${user.accountId}')" class="btn btn-action btn-danger">
                                                 <i class="fas fa-trash-alt"></i>
                                             </button>
                                         </th>
                                     </tr>
                                 <script>
                                     //Create data
-                                    initDataStatusAccount('${moderator.accountId}',${moderator.status});
+                                    initDataStatusAccount('${user.accountId}',${user.status});
                                 </script>
                             </c:forEach>
                             </tbody>

@@ -50,7 +50,7 @@
                 </a>
                 <ul class="treeview-menu">
                     <li><a id="sidebar-moderator-manager"  href="#">Quản trị viên</a></li>
-                    <li><a id="sidebar-account-manager"  href="#">Quản lý người dùng</a></li>
+                    <li><a id="sidebar-user-manager"  href="#">Quản lý người dùng</a></li>
                     <li><a id="sidebar-account-insert"  href="#">Thêm người dùng</a></li>
                 </ul>
                 
