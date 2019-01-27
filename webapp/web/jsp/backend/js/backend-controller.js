@@ -7,6 +7,7 @@ function goPage(url) {
         success: function (response) {
             console.log('Sidebar success', url);
             $('#root').html(response);
+            window.history.pushState("Details","Title",url);
         },
         error: function (response) {
             console.log('Sidebar error', url);
